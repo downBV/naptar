@@ -34,31 +34,28 @@
     }
 
     #navbar {
-    background-color: #000;
-    color: white;
-    display: flex;
-    justify-content: space-around;
-    align-items: center; /* Függőleges középre igazítás */
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    height: 100px; /* Fix magasság */
-    box-sizing: border-box;
-    overflow: hidden;
-}
-
+        background-color: #000;
+        color: white;
+        display: flex;
+        width: 100%;
+        height: 60px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+    
     #navbar button {
         background-color: transparent;
         border: none;
         color: white;
-        height: 100%; /* Teljes magasság */
+        height: 100%;
         font-size: 16px;
-        flex: 1;
+        width: 25%; /* Mind a 4 gomb pontosan 25%-ot foglal el */
+        flex: none; /* Ne legyen flexbox növekedés/zsugorodás */
         margin: 0;
-        border-radius: 0; /* Eltávolítjuk a lekerekítést */
+        padding: 0;
         transition: background-color 0.3s;
         white-space: nowrap;
-        min-width: 0;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -2427,19 +2424,39 @@
         }
 
         addMidyearChange(month, salary) {
-            const change = {
-                month: parseInt(month),
-                salary: salary,
-                id: Date.now()  // egyedi azonosító
-            };
+            try {
+                // Ellenőrizzük, hogy van-e már ilyen hónapra változás
+                if (!this.yearlyData[this.currentSettingsYear].settings.midyear_changes) {
+                    this.yearlyData[this.currentSettingsYear].settings.midyear_changes = [];
+                }
         
-            if (!this.yearlyData[this.currentSettingsYear].settings.midyear_changes) {
-                this.yearlyData[this.currentSettingsYear].settings.midyear_changes = [];
+                // Ellenőrizzük, hogy van-e már változás erre a hónapra
+                const existingChangeIndex = this.yearlyData[this.currentSettingsYear].settings.midyear_changes
+                    .findIndex(change => change.month === parseInt(month));
+        
+                const change = {
+                    month: parseInt(month),
+                    salary: salary,
+                    id: Date.now()
+                };
+        
+                if (existingChangeIndex !== -1) {
+                    // Ha már van változás erre a hónapra, frissítjük
+                    this.yearlyData[this.currentSettingsYear].settings.midyear_changes[existingChangeIndex] = change;
+                } else {
+                    // Ha nincs még változás erre a hónapra, hozzáadjuk
+                    this.yearlyData[this.currentSettingsYear].settings.midyear_changes.push(change);
+                }
+        
+                this.displayMidyearChanges();
+                this.saveYearlyData();
+                
+                // Frissítjük a bérszámfejtési táblázatot is
+                this.generatePayrollTable();
+            } catch (error) {
+                console.error("Hiba az évközi változás hozzáadása során:", error);
+                alert("Hiba történt az évközi változás hozzáadása során!");
             }
-        
-            this.yearlyData[this.currentSettingsYear].settings.midyear_changes.push(change);
-            this.displayMidyearChanges();
-            this.saveYearlyData();
         }
 
         // Évközi változások megjelenítése
@@ -3457,19 +3474,26 @@
             try {
                 const currentDate = new Date(this.currentYear, this.currentMonth, day);
                 const currentPattern = this.yearlyData[this.currentYear]?.settings?.muszakrend || "1";
-                if (this.calculator.isHoliday(this.currentYear, this.currentMonth, day)) {
-                    return " "; // Ünnepnapon nem generálunk műszakot
-                }
                 let shiftValue;
                 
                 switch (currentPattern) {
                     case "A":
+                        // A, B, C műszakrendnél ne generáljon műszakot ünnepnapon
+                        if (this.calculator.isHoliday(this.currentYear, this.currentMonth, day)) {
+                            return " ";
+                        }
                         shiftValue = this.generateAShiftPattern(this.currentYear, this.currentMonth, day);
                         break;
                     case "B":
+                        if (this.calculator.isHoliday(this.currentYear, this.currentMonth, day)) {
+                            return " ";
+                        }
                         shiftValue = this.generateBShiftPattern(this.currentYear, this.currentMonth, day);
                         break;
                     case "C":
+                        if (this.calculator.isHoliday(this.currentYear, this.currentMonth, day)) {
+                            return " ";
+                        }
                         shiftValue = this.generateCShiftPattern(this.currentYear, this.currentMonth, day);
                         break;
                     case "1":
