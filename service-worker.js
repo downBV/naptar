@@ -1,18 +1,19 @@
 const CACHE_NAME = 'mushakrend-cache-v1';
 const urlsToCache = [
   '/',
-  '/index.html',
-  '/icon.png',
-  '/manifest.json'
+  'index.html',
+  'icon.png',
+  'manifest.json'
 ];
 
-// Service Worker telepítése
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Cache opened');
-        return cache.addAll(urlsToCache);
+        return cache.addAll(urlsToCache.map(url => new Request(url, { credentials: 'same-origin' })));
+      })
+      .catch(error => {
+        console.error('Caching failed:', error);
       })
   );
 });
