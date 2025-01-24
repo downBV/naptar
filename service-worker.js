@@ -2,7 +2,8 @@ const CACHE_NAME = 'mushakrend-cache-v1';
 const urlsToCache = [
   '/naptar/',
   '/naptar/index.html',
-  '/naptar/icon.png'
+  '/naptar/icon.png',
+  '/naptar/manifest.json'
 ];
 
 // Service Worker telepítése
