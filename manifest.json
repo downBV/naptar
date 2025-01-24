@@ -8,7 +8,7 @@
   "theme_color": "#000000",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "/naptar/icon.png",
       "sizes": "649x649",
       "type": "image/png",
       "purpose": "any maskable"
