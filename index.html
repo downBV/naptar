@@ -56,6 +56,10 @@
         transition: background-color 0.3s;
     }
 
+    h3 {
+        font-size: 30px
+    }
+
     .section {
         display: none;
     }
@@ -141,7 +145,7 @@
     .date-number {
         font-weight: bold;
         margin: 3px 3px;
-        font-size: 30px;
+        font-size: 20px;
         color: #333;
         width: 30px;
         height: 40px;
@@ -199,8 +203,7 @@
 
     .color-preview {
         width: 100%;
-        max-width: 120px; /* Maximum szélesség megadása */
-        min-width: 80px; /* Minimum szélesség megadása */
+        min-width: 20%; /* Minimum szélesség megadása */
         height: 50px;
         border: 1px solid #ddd;
         border-radius: 4px;
@@ -3855,21 +3858,21 @@
             modal.style.backgroundColor = "#333";
             modal.style.padding = "20px";
             modal.style.borderRadius = "10px";
-            modal.style.width = "300px";
+            modal.style.width = "60%";
             modal.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
         
             // Színválasztó canvas létrehozása
             const canvas = document.createElement("canvas");
-            canvas.width = 260;
-            canvas.height = 260;
+            canvas.width = 50%;
+            canvas.height = 50%;
             canvas.style.marginBottom = "10px";
             canvas.style.cursor = "crosshair";
         
             // Canvas konténer a kör jelzőhöz
             const canvasContainer = document.createElement("div");
             canvasContainer.style.position = "relative";
-            canvasContainer.style.width = "260px";
-            canvasContainer.style.height = "260px";
+            canvasContainer.style.width = "50%";
+            canvasContainer.style.height = "50%";
         
             // Kör jelző
             const colorSelector = document.createElement("div");
@@ -3887,8 +3890,8 @@
         
             // Színsáv létrehozása
             const hueCanvas = document.createElement("canvas");
-            hueCanvas.width = 260;
-            hueCanvas.height = "20";
+            hueCanvas.width = 50%;
+            hueCanvas.height = "40";
             hueCanvas.style.cursor = "pointer";
             hueCanvas.style.marginTop = "10px";
             hueCanvas.style.position = "relative";
@@ -3896,8 +3899,8 @@
             // Színsáv konténer
             const hueContainer = document.createElement("div");
             hueContainer.style.position = "relative";
-            hueContainer.style.width = "260px";
-            hueContainer.style.height = "20px";
+            hueContainer.style.width = "50%";
+            hueContainer.style.height = "40px";
             hueContainer.style.marginTop = "10px";
         
             // Színsáv csúszka
@@ -3905,7 +3908,7 @@
             hueSlider.style.position = "absolute";
             hueSlider.style.top = "0";
             hueSlider.style.width = "4px";
-            hueSlider.style.height = "20px";
+            hueSlider.style.height = "40px";
             hueSlider.style.backgroundColor = "white";
             hueSlider.style.border = "1px solid black";
             hueSlider.style.pointerEvents = "none";
