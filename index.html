@@ -40,9 +40,7 @@
         justify-content: space-around;
         padding: 10px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        min-height: 10%;
-        height: 10%;
-        font-size: 40px
+        height: 20%;
     }
 
     #navbar button {
@@ -50,15 +48,11 @@
         border: none;
         color: white;
         padding: 10px;
-        font-size: 40px;
+        font-size: 24px;
         flex-grow: 1;
         margin: 0 5px;
         border-radius: 5px;
         transition: background-color 0.3s;
-    }
-
-    h3 {
-        font-size: 45px
     }
 
     .section {
@@ -88,17 +82,17 @@
         color: white;
         border: none;
         padding: 10px 15px;
-        font-size: 100px;
+        font-size: 24px;
         border-radius: 5px;
     }
 
     #current-month {
-        font-size: 80px;
+        font-size: 30px;
         margin: 0;
     }
 
     #current-payroll-month {
-        font-size: 80px;
+        font-size: 30px;
         margin: 0;   
     }
 
@@ -146,7 +140,7 @@
     .date-number {
         font-weight: bold;
         margin: 3px 3px;
-        font-size: 24px;
+        font-size: 10px;
         color: #333;
         width: 30px;
         height: 40px;
@@ -160,8 +154,6 @@
 
     /* Színbeállítások stílusai */
     .color-row {
-        font-size: 30px;
-        height: 300px;
         display: flex;
         align-items: center;
         margin: 10px 0;
@@ -181,7 +173,6 @@
     .color-buttons {
         display: flex;
         flex: 1;
-        height: 100px;
         gap: 10px;
         min-width: 0; /* Flexbox túlcsordulás megakadályozása */
     }
@@ -197,7 +188,6 @@
         white-space: nowrap; /* Szöveg egy sorban tartása */
         overflow: hidden;
         text-overflow: ellipsis;
-        font-size: 30px;
     }
 
     .color-picker:hover {
@@ -206,8 +196,9 @@
 
     .color-preview {
         width: 100%;
-        min-width: 20%; /* Minimum szélesség megadása */
-        height: 100px;
+        max-width: 120px; /* Maximum szélesség megadása */
+        min-width: 80px; /* Minimum szélesség megadása */
+        height: 50px;
         border: 1px solid #ddd;
         border-radius: 4px;
         display: flex;
@@ -215,7 +206,7 @@
         justify-content: center;
         text-align: center;
         padding: 4px;
-        font-size: 30px;
+        font-size: 12px;
         font-weight: bold;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -241,7 +232,7 @@
     
         .color-picker {
             padding: 6px 8px;
-            font-size: 30px;
+            font-size: 14px;
         }
     }
 
@@ -310,7 +301,7 @@
         color: black;
         border: black 1px solid;
         border-radius: 5px;
-        font-size: 30px;
+        font-size: 16px;
         text-align: center;
     }
 
@@ -326,7 +317,6 @@
         justify-content: space-between;
         width: 100%;
         padding: 10px 0;
-        height: 300px;
       }
       
     .settings-group > * {
@@ -372,7 +362,7 @@
       }
 
     #settings-header {
-        font-size: 40px;
+        font-size: 30px;
         margin: 0;
     }
 
@@ -381,7 +371,7 @@
         color: white;
         border: none;
         padding: 10px 15px;
-        font-size: 100px;
+        font-size: 24px;
         border-radius: 5px;
     }
 
@@ -409,7 +399,7 @@
     /* Alap stílusok minden shift-select elemre */
     .shift-select {
         width: 100%;
-        font-size: 25px;
+        font-size: 10px;
         padding: 0px;
         margin-top: 3px;
         border: 1px solid #ddd;
@@ -442,13 +432,12 @@
         left: 50%;
         transform: translate(-50%, -50%);
         width: 80%;
-        max-width: 80vh;
-        max-height: 80%; /* Maximum magasság a viewport 80%-a */
+        max-width: 400px;
+        max-height: 80vh; /* Maximum magasság a viewport 80%-a */
         background-color: white;
         border: 2px solid #4a90e2;
-        margin: 5px 5px
         border-radius: 10px;
-        padding: 40px;
+        padding: 20px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         z-index: 1000;
         overflow-y: auto; /* Görgetés engedélyezése */
@@ -476,14 +465,13 @@
 
     .shift-select-modal select {
         width: 100%;
-        font-size: 40px;
+        font-size: 16px;
         padding: 10px;
-        margin: 5px 5px;
         margin-bottom: 10px;
     }
 
     .shift-select-modal button {
-        font-size: 40px; /* Nagyobb betűméret a modal gomboknak */
+        font-size: 14px; /* Nagyobb betűméret a modal gomboknak */
         padding: 12px; /* Több padding */
     }
 
@@ -499,7 +487,6 @@
 
     #payroll-table {
         width: 100%;
-        height: 100%;
         border-collapse: collapse;
     }
 
@@ -509,8 +496,6 @@
         padding: 8px;
         text-align: left;
         font-weight: bold;
-        height: 100%;
-        font-size: 30px;
     }
 
     #payroll-table tr:nth-child(even) {
@@ -522,7 +507,6 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 10px;
-        font-size: 60px;
     }
 
     #payroll-header button {
@@ -530,7 +514,7 @@
         color: white;
         border: none;
         padding: 10px 15px;
-        font-size: 100px;
+        font-size: 24px;
         border-radius: 5px;
     }
 
@@ -564,9 +548,8 @@
     #payroll-body input[type="number"] {
         border: 1px solid #e2e8f0;
         padding: 4px 8px;
-        width: 200px;
-        text-align: center;
-        font-size: 30px;
+        width: 100px;
+        text-align: right;
     }
 
     #payroll-body input[type="number"]:focus {
@@ -596,10 +579,10 @@
             <tr>
             <th>H</th>
             <th>K</th>
-            <th>SZE</th>
-            <th>CS</th>
+            <th>Sz</th>
+            <th>Cs</th>
             <th>P</th>
-            <th>SZO</th>
+            <th>Sz</th>
             <th>V</th>
             </tr>
         </thead>
@@ -648,7 +631,7 @@
             color: white;
             border: none;
             padding: 10px 15px;
-            font-size: 100px;
+            font-size: 24px;
             border-radius: 5px;
             "
         >
@@ -662,7 +645,7 @@
             color: white;
             border: none;
             padding: 10px 15px;
-            font-size: 100px;
+            font-size: 24px;
             border-radius: 5px;
             "
         >
@@ -759,7 +742,7 @@
             id="under25-checkbox"
             style="margin-right: 10px"
             />
-            <label for="under25-checkbox" style="font-size: 40px">25 év alatti vagyok</label>
+            <label for="under25-checkbox">25 év alatti vagyok</label>
         </div>
         <div id="birth-date-container" style="display: none">
             <input
@@ -923,8 +906,8 @@
         </div>
         </div>
 
-        <!-- Mentés gomb -->
-        <!-- <button id="save-settings" class="mobile-button">Mentés</button>
+        <!-- Mentés gomb 
+        <button id="save-settings" class="mobile-button">Mentés</button>
     </div> -->
 
     <div id="help-section" class="section">
