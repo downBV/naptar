@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mushakrend-cache-v1';
+const CACHE_NAME = 'muszakrend-cache-v1';
 const urlsToCache = [
   '/naptar/',
   '/naptar/index.html',
@@ -16,33 +16,44 @@ self.addEventListener('install', event => {
         console.error('Caching failed:', error);
       })
   );
+  // Azonnal aktiválja az új service worker-t
+  self.skipWaiting();
 });
 
-// Service Worker aktiválása
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    Promise.all([
+      // Régi cache-ek törlése
+      caches.keys().then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => {
+            if (cacheName !== CACHE_NAME) {
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      }),
+      // Azonnal átveszi az irányítást minden kliens felett
+      clients.claim()
+    ])
   );
 });
 
-// Fetch események kezelése
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then(response => {
-        if (response) {
-          return response;
+        // Csak a sikeres válaszokat cache-eljük
+        if (response.status === 200) {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, responseClone);
+          });
         }
-        return fetch(event.request);
+        return response;
+      })
+      .catch(() => {
+        return caches.match(event.request);
       })
   );
 });
