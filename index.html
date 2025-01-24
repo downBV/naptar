@@ -34,24 +34,28 @@
     }
 
     #navbar {
-        background-color: #000;
-        color: white;
-        display: flex;
-        width: 100%;
-        height: 60px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        box-sizing: border-box;
-        overflow: hidden;
-    }
-    
+    background-color: #000;
+    color: white;
+    display: flex;
+    width: 100%;
+    height: 90px; /* Másfélszeres magasság az eredetihez képest */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    overflow: hidden;
+    position: fixed; /* Fix pozíció */
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
     #navbar button {
         background-color: transparent;
         border: none;
         color: white;
-        height: 100%;
-        font-size: 16px;
-        width: 25%; /* Mind a 4 gomb pontosan 25%-ot foglal el */
-        flex: none; /* Ne legyen flexbox növekedés/zsugorodás */
+        height: 90px; /* Azonos magasság a navbarral */
+        font-size: 24px; /* Nagyobb betűméret */
+        width: 25%;
+        flex: none;
         margin: 0;
         padding: 0;
         transition: background-color 0.3s;
