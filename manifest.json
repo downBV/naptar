@@ -2,7 +2,7 @@
   "name": "Műszak Naptár",
   "short_name": "Műszak Naptár",
   "description": "Műszak beosztás és bérszámfejtés kalkulátor",
-  "start_url": "/",
+  "start_url": "/naptar/",
   "display": "standalone",
   "background_color": "#f4f4f4",
   "theme_color": "#000000",
@@ -13,5 +13,8 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "orientation": "portrait",
+  "prefer_related_applications": false,
+  "scope": "/naptar/"
 }
