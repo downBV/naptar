@@ -4535,8 +4535,8 @@
         // Service Worker regisztrálása
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/naptar/public/service-worker.js', {
-                scope: '/naptar/public/'
+            navigator.serviceWorker.register('/naptar/service-worker.js', {
+                scope: '/naptar/'
             })
             .then(registration => {
                 console.log('ServiceWorker regisztrálva:', registration);
