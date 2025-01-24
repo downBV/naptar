@@ -3909,13 +3909,13 @@
             const hueContainer = document.createElement("div");
             hueContainer.style.position = "relative";
             hueContainer.style.width = canvasSize + "px";
-            hueContainer.style.height = "20px";
+            hueContainer.style.height = "40px";
             hueContainer.style.margin = "5px 0"; // kisebb margin
         
             // Színsáv létrehozása - a szélesség ugyanakkora mint a fő canvas
             const hueCanvas = document.createElement("canvas");
             hueCanvas.width = canvasSize;
-            hueCanvas.height = 25;  // magasabb, hogy jobban látható legyen
+            hueCanvas.height = 40;  // magasabb, hogy jobban látható legyen
             hueCanvas.style.cursor = "pointer";
         
             // Színsáv csúszka
@@ -3923,7 +3923,7 @@
             hueSlider.style.position = "absolute";
             hueSlider.style.top = "0";
             hueSlider.style.width = "4px";
-            hueSlider.style.height = "20px";
+            hueSlider.style.height = "40px";
             hueSlider.style.backgroundColor = "white";
             hueSlider.style.border = "1px solid black";
             hueSlider.style.pointerEvents = "none";
@@ -4101,6 +4101,7 @@
             // Gombok
             const buttonContainer = document.createElement("div");
             buttonContainer.style.display = "flex";
+            buttonContainer.style.height = "60px";
             buttonContainer.style.gap = "8px";
             buttonContainer.style.width = canvasSize + "px";
             buttonContainer.style.marginTop = "5px";
@@ -4109,7 +4110,7 @@
             saveButton.textContent = "Mentés";
             saveButton.style.flex = "1";
             saveButton.style.padding = "10px";
-            saveButton.style.fontSize = "16px";
+            saveButton.style.fontSize = "25px";
             saveButton.style.backgroundColor = "#4CAF50";
             saveButton.style.color = "white";
             saveButton.style.border = "none";
@@ -4120,7 +4121,7 @@
             cancelButton.textContent = "Mégse";
             cancelButton.style.flex = "1";
             cancelButton.style.padding = "10px";
-            cancelButton.style.fontSize = "16px";
+            cancelButton.style.fontSize = "25px";
             cancelButton.style.backgroundColor = "#f44336";
             cancelButton.style.color = "white";
             cancelButton.style.border = "none";
