@@ -161,7 +161,7 @@
     /* Színbeállítások stílusai */
     .color-row {
         font-size: 30px;
-        height: 150px;
+        height: 300px;
         display: flex;
         align-items: center;
         margin: 10px 0;
@@ -181,6 +181,7 @@
     .color-buttons {
         display: flex;
         flex: 1;
+        height: 100px;
         gap: 10px;
         min-width: 0; /* Flexbox túlcsordulás megakadályozása */
     }
@@ -206,7 +207,7 @@
     .color-preview {
         width: 100%;
         min-width: 20%; /* Minimum szélesség megadása */
-        height: 50px;
+        height: 100px;
         border: 1px solid #ddd;
         border-radius: 4px;
         display: flex;
@@ -757,7 +758,7 @@
             id="under25-checkbox"
             style="margin-right: 10px"
             />
-            <label for="under25-checkbox" style="font-size: 30px">25 év alatti vagyok</label>
+            <label for="under25-checkbox" style="font-size: 40px">25 év alatti vagyok</label>
         </div>
         <div id="birth-date-container" style="display: none">
             <input
@@ -4555,8 +4556,8 @@
         // Service Worker regisztrálása
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/service-worker.js', {
-                scope: '/'
+            navigator.serviceWorker.register('/naptar/service-worker.js', {
+                scope: '/naptar/'
             })
             .then(registration => {
                 console.log('ServiceWorker regisztrálva:', registration);
