@@ -11,7 +11,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="manifest" href="public/manifest.json">
-    <link rel="icon" type="image/png" href="./icon.png">
+    <link rel="icon" type="image/png" href="public/icon.png">
     <title>Műszak Naptár</title>
     <style>
     * {
@@ -4536,7 +4536,7 @@
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/naptar/public/service-worker.js', {
-                scope: '/naptar/'
+                scope: '/naptar/public/'
             })
             .then(registration => {
                 console.log('ServiceWorker regisztrálva:', registration);
