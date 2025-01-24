@@ -1,6 +1,6 @@
 {
   "name": "Műszak Naptár",
-  "short_name": "Műszak",
+  "short_name": "Műszak Naptár",
   "description": "Műszak beosztás és bérszámfejtés kalkulátor",
   "start_url": "/",
   "display": "standalone",
