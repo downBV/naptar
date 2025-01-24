@@ -2,13 +2,13 @@
   "name": "Műszak Naptár",
   "short_name": "Műszak",
   "description": "Műszak beosztás és bérszámfejtés kalkulátor",
-  "start_url": "https://downbv.github.io/naptar/",
+  "start_url": "/public/",
   "display": "standalone",
   "background_color": "#f4f4f4",
   "theme_color": "#000000",
   "icons": [
     {
-      "src": "https://downbv.github.io/naptar/icon.png",
+      "src": "/public/icon.png",
       "sizes": "649x649",
       "type": "image/png",
       "purpose": "any maskable"
