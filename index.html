@@ -1569,9 +1569,13 @@
                             shiftValue.includes("Éjszaka")) {
                             hetvegiPotlek50 += 12;
                         } else if (shiftValue.includes("Szabadság 8 óra") ||
+                                shiftValue.includes("Szabadság éj 8 óra") ||
+                                   shiftValue.includes("Csúszó éj 8 óra") ||
                                   shiftValue.includes("Csúszó 8 óra")) {
                             hetvegiPotlek50 += 4;
                         } else if (shiftValue.includes("Szabadság 4 óra") ||
+                                   shiftValue.includes("Szabadság éj 4 óra") ||
+                                   shiftValue.includes("Csúszó éj 4 óra") ||
                                   shiftValue.includes("Csúszó 4 óra")) {
                             hetvegiPotlek50 += 8;
                         }
