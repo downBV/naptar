@@ -1633,7 +1633,7 @@
                         Object.entries(monthData).forEach(([day, shiftValue]) => {
                             if (!shiftValue) return;
                             const date = new Date(year, monthIndex, parseInt(day));
-                            const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+                            const isSunday = date.getDay() === 0 || date.getDay() === 6;
                 
                             if (isWeekend) {
                                 if (shiftValue.includes("Nappal") || shiftValue.includes("Éjszaka")) {
