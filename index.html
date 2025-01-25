@@ -1455,7 +1455,7 @@
 
         calculateShiftValues(monthData, date) {
         try {
-            const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+            const isWeekend = date.getDay() === 0;
             const isHoliday = this.isHoliday(
             date.getFullYear(),
             date.getMonth(),
