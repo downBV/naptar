@@ -1335,12 +1335,15 @@
                 Object.entries(monthData).forEach(([day, shiftValue]) => {
                     if (shiftValue && shiftValue.includes("Túlóra")) {
                         const date = new Date(year, monthIndex, parseInt(day));
-                        const isWeekend = date.getDay() === 0;
-                        const hours = shiftValue.includes("12 óra") ? 12 : 
-                                    shiftValue.includes("8 óra") ? 8 : 
-                                    shiftValue.includes("4 óra") ? 4 : 0;
+                        const isSunday = date.getDay() === 0;
+                        let hours = 0;
         
-                        // Speciális kezelés A, B, C műszakrendnél
+                        // Órák meghatározása
+                        if (shiftValue.includes("12 óra")) hours = 12;
+                        else if (shiftValue.includes("8 óra")) hours = 8;
+                        else if (shiftValue.includes("4 óra")) hours = 4;
+        
+                        // A-B-C műszakrend speciális kezelése
                         if (["A", "B", "C"].includes(pattern) && isSunday) {
                             vasarnapiOrak += hours;
                         } else {
@@ -1662,23 +1665,22 @@
                         return muszakPotlek40;
                     case "Alapbér":
                         return ledolgozando > 0 ? (effectiveSalary / ledolgozando) * ledolgozott : 0;
-                        case "Túlóra alap": {
-                            // Havi 8 óra munkanapok számítása
-                            const workingDays = this.calculateWorkingDays(year, monthIndex);
-                            const havi8 = workingDays * 8;
-                            const effectiveSalary = this.getEffectiveSalary(year, monthIndex);
-                            const tuloraOrak = this.getTuloraOrak(monthIndex, year);
-                        
-                            // A teljes túlóra óraszám figyelembe vétele
-                            const osszTuloraOrak = tuloraOrak.normal + tuloraOrak.sunday;
-                        
-                            // Túlóra alapjának számítása a havi 8 óra alapján
-                            const tuloraAlap = osszTuloraOrak > 0 
-                                ? (effectiveSalary / havi8) * osszTuloraOrak 
-                                : 0;
-                        
-                            return Math.round(tuloraAlap);
-                        }       
+                    case "Túlóra alap": {
+                        const workingDays = this.calculateWorkingDays(year, monthIndex);
+                        const havi8 = workingDays * 8;
+                        const effectiveSalary = this.getEffectiveSalary(year, monthIndex);
+                        const tuloraOrak = this.getTuloraOrak(monthIndex, year);
+                    
+                        // A teljes túlóra óraszám figyelembe vétele
+                        const osszTuloraOrak = tuloraOrak.normal + tuloraOrak.sunday;
+                    
+                        // Túlóra alapjának számítása a havi 8 óra alapján
+                        const tuloraAlap = osszTuloraOrak > 0 
+                            ? (effectiveSalary / havi8) * osszTuloraOrak 
+                            : 0;
+                    
+                        return Math.round(tuloraAlap);
+                    }
                     case "Szabadságra jutó fizetés":
                         return ledolgozando > 0 ? (effectiveSalary / (ledolgozando * 12)) * szabadsagOra : 0;
                     case "Távolléti díj":
@@ -1691,20 +1693,20 @@
                         const havi8 = workingDays * 8;
                         const tuloraOrak = this.getTuloraOrak(monthIndex, year);
                         const pattern = this.app.yearlyData[year]?.settings?.muszakrend || "1";
-            
-                        // Normál túlórapótlék
+                    
+                        // Normál túlórapótlék (100%)
                         const normalTulorapotlek = (effectiveSalary / 174) * tuloraOrak.normal;
-            
+                    
                         // Vasárnapi túlórapótlék speciális kezelése A, B, C műszakrendnél
                         let vasarnapiTulorapotlek = 0;
                         if (["A", "B", "C"].includes(pattern)) {
                             // Vasárnapi túlóra 200%-os pótléka
                             vasarnapiTulorapotlek = (effectiveSalary / 174) * tuloraOrak.sunday * 2;
                         } else {
-                            // Egyéb műszakrendek normál 50%-os pótléka
+                            // Egyéb műszakrendek normál 100%-os pótléka
                             vasarnapiTulorapotlek = (effectiveSalary / 174) * tuloraOrak.sunday;
                         }
-            
+                    
                         return Math.round(normalTulorapotlek + vasarnapiTulorapotlek);
                     }
                     case "Hétvégi pótlék (50%)":
@@ -1966,7 +1968,6 @@
                     if (!shiftValue) return;
         
                     if (shiftValue.includes("Táppénz")) {
-                        // A táppénz számítás marad a régi...
                         const napiBer = Math.min(besorolas / 30, Math.round((this.MINIMUM_WAGE[year] || this.MINIMUM_WAGE[2024] * 2) / 30));
                         
                         if (betegszabadsagCount < 15) {
@@ -1988,8 +1989,6 @@
                         let orak = 12;
                         if (shiftValue.includes("8 óra")) orak = 8;
                         if (shiftValue.includes("4 óra")) orak = 4;
-        
-                        // Minden szabadságra jár mindkét átlagos pótlék
                         szabadsagPotlekDij += (atlagEjszakaiPotlek + atlagVasarnapiPotlek) * orak;
                     }
                 });
