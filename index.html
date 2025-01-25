@@ -1721,8 +1721,11 @@
                     
                         return Math.round(normalTulorapotlek + vasarnapiTulorapotlek);
                     }
-                    case "Hétvégi pótlék (50%)":
-                        return (effectiveSalary / 174) * hetvegiPotlek50 * 0.5;
+                    case "Hétvégi pótlék (50%)": {
+                        const weekendHours = this.calculateMonthlyValue("Hétvégi pótlék 50%", monthIndex, year);
+                        const effectiveSalary = this.getEffectiveSalary(year, monthIndex);
+                        return Math.round((effectiveSalary / 174) * weekendHours * 0.5);
+                    }
                     case "Műszakpótlék (40%)":
                         return (effectiveSalary / 174) * muszakPotlek40 * 0.4;
                         case "Teljesítmény prémium": {
