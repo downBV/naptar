@@ -1335,7 +1335,7 @@
                 Object.entries(monthData).forEach(([day, shiftValue]) => {
                     if (shiftValue && shiftValue.includes("Túlóra")) {
                         const date = new Date(year, monthIndex, parseInt(day));
-                        const isSunday = date.getDay() === 0;
+                        const isWeekend = date.getDay() === 0;
                         const hours = shiftValue.includes("12 óra") ? 12 : 
                                     shiftValue.includes("8 óra") ? 8 : 
                                     shiftValue.includes("4 óra") ? 4 : 0;
@@ -1633,7 +1633,7 @@
                         Object.entries(monthData).forEach(([day, shiftValue]) => {
                             if (!shiftValue) return;
                             const date = new Date(year, monthIndex, parseInt(day));
-                            const isSunday = date.getDay() === 0 || date.getDay() === 6;
+                            const isWeekend = date.getDay() === 0
                 
                             if (isWeekend) {
                                 if (shiftValue.includes("Nappal") || shiftValue.includes("Éjszaka")) {
