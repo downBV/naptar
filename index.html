@@ -1633,37 +1633,45 @@
                         return tulora100;
                     }
                     case "Hétvégi pótlék 50%": {
-                        const monthData = this.app.yearlyData[year]?.calendar_data[monthIndex] || {};
-                        let totalWeekendHours = 0;
-                        const pattern = this.app.yearlyData[year]?.settings?.muszakrend;
-                
-                        Object.entries(monthData).forEach(([day, shiftValue]) => {
-                            if (!shiftValue) return;
-                            const date = new Date(year, monthIndex, parseInt(day));
-                            const isWeekend = date.getDay() === 0;
-                
-                            if (isWeekend) {
-                                if (shiftValue.includes("Nappal") || shiftValue.includes("Éjszaka")) {
-                                    totalWeekendHours += 12;
-                                } else if (shiftValue.includes("Szabadság 8 óra") || shiftValue.includes("Csúszó 8 óra")) {
-                                    totalWeekendHours += 4;
-                                } else if (shiftValue.includes("Szabadság 4 óra") || shiftValue.includes("Csúszó 4 óra")) {
-                                    totalWeekendHours += 8;
-                                }
-                            }
-                
-                            // A-B-C műszakrendek esetén a vasárnapi túlórák hozzáadása
-                            if (["A", "B", "C"].includes(pattern) && date.getDay() === 0 && shiftValue.includes("Túlóra") || shiftValue.includes("Túlóra éj")) {
-                                if (shiftValue.includes("12 óra")) {
-                                    totalWeekendHours += 12;
-                                } else if (shiftValue.includes("8 óra")) {
-                                    totalWeekendHours += 8;
-                                }
-                            }
-                        });
-                
-                        return totalWeekendHours;
-                    }
+    const monthData = this.app.yearlyData[year]?.calendar_data[monthIndex] || {};
+    let totalWeekendHours = 0;
+    const pattern = this.app.yearlyData[year]?.settings?.muszakrend;
+
+    Object.entries(monthData).forEach(([day, shiftValue]) => {
+        if (!shiftValue) return;
+        const date = new Date(year, monthIndex, parseInt(day));
+        const isSunday = date.getDay() === 0;  // Csak vasárnapra ellenőrzünk
+
+        if (isSunday) {  // Csak vasárnapi napokra számolunk
+            if (shiftValue.includes("Nappal") || shiftValue.includes("Éjszaka")) {
+                totalWeekendHours += 12;
+            } else if (shiftValue.includes("Szabadság 8 óra") || 
+                      shiftValue.includes("Csúszó 8 óra") ||
+                      shiftValue.includes("Szabadság éj 8 óra") || 
+                      shiftValue.includes("Csúszó éj 8 óra")) {
+                totalWeekendHours += 4;
+            } else if (shiftValue.includes("Szabadság 4 óra") || 
+                      shiftValue.includes("Csúszó 4 óra") ||
+                      shiftValue.includes("Szabadság éj 4 óra") || 
+                      shiftValue.includes("Csúszó éj 4 óra")) {
+                totalWeekendHours += 8;
+            }
+
+            // A-B-C műszakrendek esetén a vasárnapi túlórák hozzáadása
+            if (["A", "B", "C"].includes(pattern) && shiftValue.includes("Túlóra")) {
+                if (shiftValue.includes("12 óra")) {
+                    totalWeekendHours += 12;
+                } else if (shiftValue.includes("8 óra")) {
+                    totalWeekendHours += 8;
+                } else if (shiftValue.includes("4 óra")) {
+                    totalWeekendHours += 4;
+                }
+            }
+        }
+    });
+
+    return totalWeekendHours;
+
 
                     case "Műszakpótlék 40%":
                         return muszakPotlek40;
