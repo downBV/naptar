@@ -1705,9 +1705,16 @@
                         const havi8 = workingDays * 8;
                         const tuloraOrak = this.getTuloraOrak(monthIndex, year);
                         const pattern = this.app.yearlyData[year]?.settings?.muszakrend || "1";
+
+                        
+    // Negyedéves túlóra keret számítása
+    let tuloraKeret = 0;
+    if ((monthIndex + 1) % 3 === 0) {
+        tuloraKeret = this.calculateQuarterlyOvertime(year, monthIndex);
+    }
                     
                         // Normál túlórapótlék (100%)
-                        const normalTulorapotlek = (effectiveSalary / 174) * tuloraOrak.normal;
+                        const normalTulorapotlek = (effectiveSalary / 174) * (tuloraOrak.normal + tuloraKeret);
                     
                         // Vasárnapi túlórapótlék speciális kezelése A, B, C műszakrendnél
                         let vasarnapiTulorapotlek = 0;
