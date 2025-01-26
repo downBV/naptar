@@ -1682,9 +1682,14 @@
                         const havi8 = workingDays * 8;
                         const effectiveSalary = this.getEffectiveSalary(year, monthIndex);
                         const tuloraOrak = this.getTuloraOrak(monthIndex, year);
+                        // Negyedéves túlóra keret számítása
+    let tuloraKeret = 0;
+    if ((monthIndex + 1) % 3 === 0) {
+        tuloraKeret = this.calculateQuarterlyOvertime(year, monthIndex);
+    }
                     
                         // A teljes túlóra óraszám figyelembe vétele
-                        const osszTuloraOrak = tuloraOrak.normal + tuloraOrak.sunday;
+                        const osszTuloraOrak = tuloraOrak.normal + tuloraOrak.sunday + tuloraKeret;
                     
                         // Túlóra alapjának számítása a havi 8 óra alapján
                         const tuloraAlap = osszTuloraOrak > 0 
