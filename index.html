@@ -1357,62 +1357,79 @@
                 console.error("Hiba a túlóra órák számításában:", error);
                 return { normal: 0, sunday: 0 };
             }
-        }
 
         calculateQuarterlyOvertime(year, monthIndex) {
-            try {
-                const startMonth = Math.floor(monthIndex / 3) * 3;
-                const months = [startMonth, startMonth + 1, startMonth + 2];
+    try {
+        const startMonth = Math.floor(monthIndex / 3) * 3;
+        const months = [startMonth, startMonth + 1, startMonth + 2];
+        
+        let totalWorkingDays = 0;
+        let totalHavi8 = 0;
+        let totalLedolgozottOrak = 0;
+        let totalCsuszoHours = 0;
+
+        months.forEach(month => {
+            const monthData = this.app.yearlyData[year]?.calendar_data[month] || {};
+            
+            let monthWorkingDays = 0;
+            Object.entries(monthData).forEach(([day, shiftValue]) => {
+                if (!shiftValue) return;
+
+                // Ledolgozott napok számolása
+                if (shiftValue?.includes("Nappal") || 
+                    shiftValue?.includes("Éjszaka") ||
+                    shiftValue?.includes("Szabadság") ||
+                    shiftValue?.includes("Táppénz")) {
+                    monthWorkingDays++;
+                }
+
+                // Ledolgozott órák számolása (csúszók nélkül)
+                if (shiftValue?.includes("Nappal") || shiftValue?.includes("Éjszaka")) {
+                    if (shiftValue.includes("12 óra")) {
+                        totalLedolgozottOrak += 12;
+                    } else if (shiftValue.includes("8 óra")) {
+                        totalLedolgozottOrak += 8;
+                    } else if (shiftValue.includes("4 óra")) {
+                        totalLedolgozottOrak += 4;
+                    }
+                }
                 
-                let totalWorkingDays = 0;
-                let totalHavi8 = 0;
-                let totalCsuszoHours = 0;
+                // Csúszó órák számolása
+                if (shiftValue?.includes("Csúszó")) {
+                    if (shiftValue.includes("12 óra")) {
+                        totalCsuszoHours += 12;
+                    } else if (shiftValue.includes("8 óra")) {
+                        totalCsuszoHours += 8;
+                    } else if (shiftValue.includes("4 óra")) {
+                        totalCsuszoHours += 4;
+                    }
+                }
+            });
+            
+            totalWorkingDays += monthWorkingDays;
+            const havi8 = this.calculateWorkingDays(year, month) * 8;
+            totalHavi8 += havi8;
+        });
+
+        // Túlóra keret számítása:
+        // 1. Először kiszámoljuk az összes ledolgozandó órát (12 órás műszakok)
+        const totalRequiredHours = totalWorkingDays * 12;
         
-                months.forEach(month => {
-                    const monthData = this.app.yearlyData[year]?.calendar_data[month] || {};
-                    
-                    let monthWorkingDays = 0;
-                    Object.values(monthData).forEach(shiftValue => {
-                        if (shiftValue?.includes("Nappal") || 
-                            shiftValue?.includes("Éjszaka") ||
-                            shiftValue?.includes("Szabadság") ||
-                            shiftValue?.includes("Csúszó") ||
-                            shiftValue?.includes("Táppénz")) {
-                            monthWorkingDays++;
-                        }
-                        
-                        // Bővített csúszó órák számítása
-                        if (shiftValue?.includes("Csúszó")) {
-                            if (shiftValue.includes("12 óra")) {
-                                totalCsuszoHours += 12;
-                            } else if (shiftValue.includes("8 óra")) {
-                                totalCsuszoHours += 8;
-                            } else if (shiftValue.includes("4 óra")) {
-                                totalCsuszoHours += 4;
-                            }
-                        }
-                    });
-                    
-                    const havi8 = this.calculateWorkingDays(year, month) * 8;
-                    totalWorkingDays += monthWorkingDays;
-                    totalHavi8 += havi8;
-                    
-                    console.log(`${month + 1}. hónap: Ledolgozandó: ${monthWorkingDays}, Havi8: ${havi8}, Csúszó: ${totalCsuszoHours}`);
-                });
+        // 2. Kivonjuk belőle a havi 8 órás munkaidőt
+        // 3. Kivonjuk a csúszó órákat
+        const tuloraKeret = totalRequiredHours - totalHavi8 - totalCsuszoHours;
         
-                const tuloraKeret = (totalWorkingDays * 12) - totalHavi8 - totalCsuszoHours;
-                
-                console.log(`Túlóra keret számítás (${monthIndex + 1}. hónap):
-                    - 3 havi ledolgozandó: ${totalWorkingDays} nap (${totalWorkingDays * 12} óra)
-                    - 3 havi havi8: ${totalHavi8} óra
-                    - Levont csúszó órák: ${totalCsuszoHours} óra
-                    - Túlóra keret: ${Math.max(0, tuloraKeret)} óra`);
-        
-                return Math.max(0, tuloraKeret);
-            } catch (error) {
-                console.error("Hiba a negyedéves túlóra számításában:", error);
-                return 0;
-            }
+        console.log(`Túlóra keret számítás (${monthIndex + 1}. hónap):
+            - 3 havi ledolgozandó napok: ${totalWorkingDays} (${totalRequiredHours} óra)
+            - 3 havi havi8: ${totalHavi8} óra
+            - Levont csúszó órák: ${totalCsuszoHours} óra
+            - Túlóra keret: ${Math.max(0, tuloraKeret)} óra`);
+
+        return Math.max(0, tuloraKeret);
+    } catch (error) {
+        console.error("Hiba a negyedéves túlóra számításában:", error);
+        return 0;
+    }
         }
 
         calculateWorkingDays(year, month) {
