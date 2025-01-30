@@ -93,8 +93,7 @@
     width: 100%;
     box-sizing: border-box;
     height: calc(100vh - 90px);
-    display: flex;
-    flex-direction: column;
+    overflow-y: auto;
     }
 
     #calendar-header {
@@ -127,6 +126,8 @@
 
     #calendarTable {
         flex-grow: 1;
+        min-height: 80%;
+        height: 90%;
         width: 100%;
         border-collapse: collapse;
         table-layout: fixed;
@@ -431,7 +432,7 @@
         margin-top: 3px;
         border: 1px solid #ddd;
         border-radius: 4px;
-        flex: 1;
+        height: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: wrap;
