@@ -588,6 +588,46 @@
         border-color: #4a90e2;
         box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
     }
+
+    salary-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.salary-input {
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.visibility-toggle {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease;
+}
+
+.visibility-toggle:active {
+  transform: scale(0.9);
+}
+
+@keyframes fadeMask {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.masked-value {
+  animation: fadeMask 0.3s ease;
+}
     </style>
 </head>
 <body>
@@ -703,12 +743,21 @@
         <!-- Besorolási bér -->
         <div class="setting-group">
         <h3>Besorolási bér</h3>
-        <input
-            type="number"
-            id="base-salary"
-            class="mobile-button"
-            placeholder="Besorolási bér"
-        />
+  <div class="salary-container">
+    <input
+      type="number"
+      id="base-salary"
+      class="mobile-button salary-input"
+      placeholder="Besorolási bér"
+      style="padding-right: 45px;"
+    />
+    <button 
+      id="toggle-salary-visibility"
+      class="visibility-toggle"
+    >
+      •••
+    </button>
+  </div>
         <div class="setting-group">
             <h3>Éves szabadság</h3>
             <input type="number" id="vacation-days" class="mobile-button" placeholder="Éves szabadságnapok">
@@ -3107,6 +3156,71 @@
                         birthMonthInput.value = this.yearlyData[this.currentYear].settings.under25.birthMonth || "";
                     }
                 }
+                // Besorolási bér mező kezelése
+const handleSalaryVisibility = () => {
+    const salaryInput = document.getElementById('base-salary');
+    const toggleButton = document.getElementById('toggle-salary-visibility');
+    let isVisible = false;
+    let hideTimeout;
+
+    if (salaryInput && toggleButton) {
+        // Kezdeti érték elrejtése funkció - most pontokat használunk csillagok helyett
+        const maskValue = (value) => '•'.repeat(value.toString().length);
+        
+        // Input eseménykezelő
+        salaryInput.addEventListener('input', function(e) {
+            clearTimeout(hideTimeout);
+            const value = e.target.value;
+            
+            // Érték ideiglenes megjelenítése
+            this.type = 'number';
+            this.value = value;
+            
+            // Időzítő beállítása az elrejtéshez
+            if (!isVisible) {
+                hideTimeout = setTimeout(() => {
+                    this.type = 'text';
+                    this.value = maskValue(value);
+                    this.classList.add('masked-value');
+                }, 1500);
+            }
+        });
+
+        // Láthatóság kapcsoló
+        toggleButton.addEventListener('click', function() {
+            isVisible = !isVisible;
+            const currentValue = salaryInput.value.replace(/[•]/g, '');
+            
+            if (isVisible) {
+                salaryInput.type = 'number';
+                salaryInput.value = currentValue;
+                this.textContent = '×';
+                salaryInput.classList.remove('masked-value');
+            } else {
+                salaryInput.type = 'text';
+                salaryInput.value = maskValue(currentValue);
+                this.textContent = '•••';
+                salaryInput.classList.add('masked-value');
+            }
+            
+            // Gomb animáció
+            this.style.transform = 'scale(0.8)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 100);
+        });
+
+        // Kezdeti állapot beállítása
+        salaryInput.type = 'text';
+        salaryInput.value = maskValue(salaryInput.value);
+        salaryInput.classList.add('masked-value');
+
+        // Mobilbarát érintés kezelés
+        toggleButton.addEventListener('touchstart', function(e) {
+            e.preventDefault(); // Megakadályozza az alapértelmezett érintés viselkedést
+        });
+    }
+};
         
                 // Színbeállítások betöltése és előnézetek frissítése
                 this.loadColorSettings();
