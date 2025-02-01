@@ -15,24 +15,26 @@
     <meta http-equiv="Expires" content="0">
     <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
     <link rel="icon" type="image/png" href="./icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <title>Műszak Naptár</title>
     <style>
-    @font-face {
-        font-family: 'Verdana';
-        src: url('verdana.woff2') format('woff2'),
-                url('verdana.woff') format('woff'),
-                url('verdana.ttf') format('truetype');
-        font-weight: bold;
-        font-style: normal;
-    }
-    
     * {
-        font-family: Verdana, Arial, Helvetica, sans-serif;
-        font-weight: bold;
+        font-family: 'Roboto', Arial, Helvetica, sans-serif;
+        font-weight: 700; /* Alapértelmezett vastagság */
         box-sizing: border-box;
         margin: 0;
         padding: 0;
         touch-action: manipulation;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        sans-serif;
+        background-color: #f4f4f4;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        padding-top: 100px;
     }
 
     body {
