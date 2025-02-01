@@ -590,44 +590,180 @@
     }
 
     salary-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+    
+    .salary-input {
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+    
+    .visibility-toggle {
+      position: absolute;
+      right: 10px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      transition: transform 0.3s ease;
+    }
+    
+    .visibility-toggle:active {
+      transform: scale(0.9);
+    }
+    
+    @keyframes fadeMask {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .masked-value {
+      animation: fadeMask 0.3s ease;
+    }
 
-.salary-input {
-  width: 100%;
-  transition: all 0.3s ease;
-}
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideInLeft {
+        from {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOutRight {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+    
+    @keyframes slideOutLeft {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+    }
+    
+    #calendar-section, #payroll-section {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    #calendar-body, #payroll-body {
+        animation-duration: 0.2s;
+        animation-fill-mode: both;
+    }
+    
+    .slide-in-right {
+        animation-name: slideInRight;
+    }
+    
+    .slide-in-left {
+        animation-name: slideInLeft;
+    }
+    
+    .slide-out-right {
+        animation-name: slideOutRight;
+    }
+    
+    .slide-out-left {
+        animation-name: slideOutLeft;
+    }
 
-.visibility-toggle {
-  position: absolute;
-  right: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  transition: transform 0.3s ease;
-}
-
-.visibility-toggle:active {
-  transform: scale(0.9);
-}
-
-@keyframes fadeMask {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.masked-value {
-  animation: fadeMask 0.3s ease;
-}
+    @keyframes slideYearInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideYearInLeft {
+        from {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideYearOutRight {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+    
+    @keyframes slideYearOutLeft {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+    }
+    
+    #settings-content {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .slide-year-in-right {
+        animation: slideYearInRight 0.2s forwards;
+    }
+    
+    .slide-year-in-left {
+        animation: slideYearInLeft 0.2s forwards;
+    }
+    
+    .slide-year-out-right {
+        animation: slideYearOutRight 0.2s forwards;
+    }
+    
+    .slide-year-out-left {
+        animation: slideYearOutLeft 0.2s forwards;
+    }
+        
     </style>
 </head>
 <body>
@@ -743,20 +879,15 @@
         <!-- Besorolási bér -->
         <div class="setting-group">
         <h3>Besorolási bér</h3>
-  <div class="salary-container">
-    <input
-      type="number"
-      id="base-salary"
-      class="mobile-button salary-input"
-      placeholder="Besorolási bér"
-      style="padding-right: 45px;"
-    />
-    <button 
-      id="toggle-salary-visibility"
-      class="visibility-toggle"
-    >
-    </button>
-  </div>
+        <div style="position: relative;">
+            <input
+                type="number"
+                id="base-salary"
+                class="mobile-button salary-input"
+                placeholder="Besorolási bér"
+                style="padding-right: 45px;"
+            />
+        </div>
         <div class="setting-group">
             <h3>Éves szabadság</h3>
             <input type="number" id="vacation-days" class="mobile-button" placeholder="Éves szabadságnapok">
@@ -992,7 +1123,7 @@
     </div>
 
     <div id="help-section" class="section">
-    <div style="text-align: left; padding: 15px; line-height: 1.6;">
+    <div style="margin: 15px; text-align: left; padding: 15px; line-height: 1.6;">
         <h3>A program használata:</h3>
         
         <h4>Év választó:</h4>
@@ -1030,6 +1161,144 @@
     <script>
     let app;
 
+    function initSalaryVisibility() {
+        const salaryInput = document.getElementById('base-salary');
+        const toggleButton = document.createElement('button');
+        toggleButton.id = 'toggle-salary-visibility';
+        toggleButton.className = 'visibility-toggle';
+        toggleButton.innerHTML = '👁️‍🗨️';
+        let isVisible = false;
+        let originalValue = salaryInput?.value || '';
+        let hideTimeout;
+    
+        // CSS animációk
+        const style = document.createElement('style');
+        style.textContent = `
+            .salary-input {
+                transition: opacity 0.3s ease-in-out;
+            }
+            .salary-fade {
+                opacity: 0.5;
+            }
+            .visibility-toggle {
+                transition: transform 0.2s ease;
+            }
+            .visibility-toggle:active {
+                transform: translateY(-50%) scale(0.9);
+            }
+        `;
+        document.head.appendChild(style);
+    
+        // Stílusok beállítása
+        toggleButton.style.cssText = `
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 15px;
+            font-size: 24px;
+            z-index: 10;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        `;
+    
+        // Érték maszkolása
+        const maskValue = (value) => '•'.repeat(String(value).length);
+    
+        // Érték megjelenítés kezelése
+        const updateInputVisibility = () => {
+            if (isVisible) {
+                salaryInput.type = 'number';
+                salaryInput.value = originalValue;
+            } else {
+                // Először állítsuk be text típusúra
+                salaryInput.type = 'text';
+                // Majd maszkoljuk az értéket
+                salaryInput.value = maskValue(originalValue);
+            }
+        };
+    
+        if (salaryInput) {
+            salaryInput.parentElement.style.position = 'relative';
+            salaryInput.style.paddingRight = '45px';
+            salaryInput.parentElement.appendChild(toggleButton);
+    
+            // Kezdeti állapot beállítása
+            updateInputVisibility();
+    
+            // Input eseménykezelő
+            salaryInput.addEventListener('input', function(e) {
+                clearTimeout(hideTimeout);
+                if (this.type === 'number') {
+                    originalValue = this.value;
+                    
+                    if (!isVisible) {
+                        hideTimeout = setTimeout(() => {
+                            this.type = 'text';
+                            this.value = maskValue(originalValue);
+                        }, 1500);
+                    }
+                }
+            });
+    
+            // Láthatóság váltás kezelése
+            const toggleVisibility = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                isVisible = !isVisible;
+                clearTimeout(hideTimeout);
+                
+                updateInputVisibility();
+                toggleButton.innerHTML = isVisible ? '👁️' : '👁️‍🗨️';
+            };
+    
+            // Touch és click események
+            toggleButton.addEventListener('touchstart', toggleVisibility, { passive: false });
+            toggleButton.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            }, { passive: false });
+            toggleButton.addEventListener('click', toggleVisibility);
+    
+            // Focus események
+            salaryInput.addEventListener('focus', function() {
+                clearTimeout(hideTimeout);
+                if (!isVisible) {
+                    this.type = 'number';
+                    this.value = originalValue;
+                }
+            });
+    
+            salaryInput.addEventListener('blur', function() {
+                if (!isVisible) {
+                    originalValue = this.value;
+                    this.type = 'text';
+                    this.value = maskValue(originalValue);
+                }
+            });
+        }
+    
+        return {
+            getValue: () => originalValue,
+            setValue: (value) => {
+                originalValue = value;
+                if (salaryInput) {
+                    if (!isVisible) {
+                        salaryInput.type = 'text';
+                        salaryInput.value = maskValue(value);
+                    } else {
+                        salaryInput.type = 'number';
+                        salaryInput.value = value;
+                    }
+                }
+            }
+        };
+    }
+    
     const SHIFT_COLORS = {
         Nappal: ["#FFD700", "black"],
         Éjszaka: ["#4169E1", "white"],
@@ -2368,6 +2637,7 @@
                 this.initSettingsNavigation();
                 this.initTouchNavigation();
                 this.initSettings();
+                this.salaryVisibility = initSalaryVisibility();
         
                 console.log("Starting calendar generation");
                 this.generateCalendar();
@@ -2855,16 +3125,20 @@
         }
 
         showSection(sectionId) {
-            // Elrejtjük az összes szekciót
+            // Elrejtjük az összes szekciót, de megőrizzük az esetleges animációs osztályokat
             document.querySelectorAll(".section").forEach((section) => {
-                section.classList.remove("active");
+                const classes = Array.from(section.classList)
+                    .filter(cls => !cls.includes('section') && !cls.includes('active'));
+                section.className = `section ${classes.join(' ')}`;
                 section.style.display = "none";
             });
         
             // Kijelölt szekció megjelenítése
             const selectedSection = document.getElementById(sectionId);
             if (selectedSection) {
-                selectedSection.classList.add("active");
+                const classes = Array.from(selectedSection.classList)
+                    .filter(cls => !cls.includes('section') && !cls.includes('active'));
+                selectedSection.className = `section active ${classes.join(' ')}`;
                 selectedSection.style.display = "block";
             }
         }
@@ -2979,20 +3253,32 @@
         }
 
         changeSettingsYear(direction) {
-        this.currentSettingsYear += direction;
-
-        // Korlátozzuk az éveket 2024 és 2028 között
-        if (this.currentSettingsYear < 2024) {
-            this.currentSettingsYear = 2024;
-        } else if (this.currentSettingsYear > 2028) {
-            this.currentSettingsYear = 2028;
-        }
-
-        // Frissítsük az év kijelzést
-        document.getElementById("current-settings-year").textContent = this.currentSettingsYear;
-
-        // Töltsük be az adott év beállításait
-        this.loadYearSettings(this.currentSettingsYear);
+            const settingsContent = document.getElementById("settings-section");
+            
+            // Add slide out animation
+            settingsContent.className = `section ${direction > 0 ? 'slide-year-out-left' : 'slide-year-out-right'}`;
+            
+            setTimeout(() => {
+                this.currentSettingsYear += direction;
+        
+                // Korlátozzuk az éveket 2024 és 2028 között
+                if (this.currentSettingsYear < 2024) {
+                    this.currentSettingsYear = 2024;
+                    return;
+                } else if (this.currentSettingsYear > 2028) {
+                    this.currentSettingsYear = 2028;
+                    return;
+                }
+        
+                // Frissítsük az év kijelzést
+                document.getElementById("current-settings-year").textContent = this.currentSettingsYear;
+        
+                // Töltsük be az adott év beállításait
+                this.loadYearSettings(this.currentSettingsYear);
+                
+                // Add slide in animation
+                settingsContent.className = `section active ${direction > 0 ? 'slide-year-in-right' : 'slide-year-in-left'}`;
+            }, 200);
         }
 
         loadYearSettings(year) {
@@ -3034,8 +3320,8 @@
             }
             
             const baseSalaryInput = document.getElementById('base-salary');
-            if (baseSalaryInput) {
-                baseSalaryInput.value = yearData.settings.besorolasi_ber || "300000";
+            if (baseSalaryInput && this.salaryVisibility) {
+                this.salaryVisibility.setValue(yearData.settings.besorolasi_ber || "300000");
             }
             
             const otherIncomeInput = document.getElementById('other-income');
@@ -3155,71 +3441,71 @@
                         birthMonthInput.value = this.yearlyData[this.currentYear].settings.under25.birthMonth || "";
                     }
                 }
-                // Besorolási bér mező kezelése
-const handleSalaryVisibility = () => {
-    const salaryInput = document.getElementById('base-salary');
-    const toggleButton = document.getElementById('toggle-salary-visibility');
-    let isVisible = false;
-    let hideTimeout;
-
-    if (salaryInput && toggleButton) {
-        // Kezdeti érték elrejtése funkció - most pontokat használunk csillagok helyett
-        const maskValue = (value) => '•'.repeat(value.toString().length);
-        
-        // Input eseménykezelő
-        salaryInput.addEventListener('input', function(e) {
-            clearTimeout(hideTimeout);
-            const value = e.target.value;
+                            // Besorolási bér mező kezelése
+                    const handleSalaryVisibility = () => {
+                        const salaryInput = document.getElementById('base-salary');
+                        const toggleButton = document.getElementById('toggle-salary-visibility');
+                        let isVisible = false;
+                        let hideTimeout;
+                    
+                        if (salaryInput && toggleButton) {
+                    // Kezdeti érték elrejtése funkció - most pontokat használunk csillagok helyett
+                    const maskValue = (value) => '•'.repeat(value.toString().length);
+                    
+                    // Input eseménykezelő
+                    salaryInput.addEventListener('input', function(e) {
+                        clearTimeout(hideTimeout);
+                        const value = e.target.value;
+                        
+                        // Érték ideiglenes megjelenítése
+                        this.type = 'number';
+                        this.value = value;
+                        
+                        // Időzítő beállítása az elrejtéshez
+                        if (!isVisible) {
+                            hideTimeout = setTimeout(() => {
+                                this.type = 'text';
+                                this.value = maskValue(value);
+                                this.classList.add('masked-value');
+                            }, 1500);
+                        }
+                    });
             
-            // Érték ideiglenes megjelenítése
-            this.type = 'number';
-            this.value = value;
+                    // Láthatóság kapcsoló
+                    toggleButton.addEventListener('click', function() {
+                        isVisible = !isVisible;
+                        const currentValue = salaryInput.value.replace(/[•]/g, '');
+                        
+                        if (isVisible) {
+                            salaryInput.type = 'number';
+                            salaryInput.value = currentValue;
+                            this.textContent = '×';
+                            salaryInput.classList.remove('masked-value');
+                        } else {
+                            salaryInput.type = 'text';
+                            salaryInput.value = maskValue(currentValue);
+                            this.textContent = '•••';
+                            salaryInput.classList.add('masked-value');
+                        }
+                        
+                        // Gomb animáció
+                        this.style.transform = 'scale(0.8)';
+                        setTimeout(() => {
+                            this.style.transform = 'scale(1)';
+                        }, 100);
+                    });
             
-            // Időzítő beállítása az elrejtéshez
-            if (!isVisible) {
-                hideTimeout = setTimeout(() => {
-                    this.type = 'text';
-                    this.value = maskValue(value);
-                    this.classList.add('masked-value');
-                }, 1500);
-            }
-        });
-
-        // Láthatóság kapcsoló
-        toggleButton.addEventListener('click', function() {
-            isVisible = !isVisible;
-            const currentValue = salaryInput.value.replace(/[•]/g, '');
+                    // Kezdeti állapot beállítása
+                    salaryInput.type = 'text';
+                    salaryInput.value = maskValue(salaryInput.value);
+                    salaryInput.classList.add('masked-value');
             
-            if (isVisible) {
-                salaryInput.type = 'number';
-                salaryInput.value = currentValue;
-                this.textContent = '×';
-                salaryInput.classList.remove('masked-value');
-            } else {
-                salaryInput.type = 'text';
-                salaryInput.value = maskValue(currentValue);
-                this.textContent = '•••';
-                salaryInput.classList.add('masked-value');
-            }
-            
-            // Gomb animáció
-            this.style.transform = 'scale(0.8)';
-            setTimeout(() => {
-                this.style.transform = 'scale(1)';
-            }, 100);
-        });
-
-        // Kezdeti állapot beállítása
-        salaryInput.type = 'text';
-        salaryInput.value = maskValue(salaryInput.value);
-        salaryInput.classList.add('masked-value');
-
-        // Mobilbarát érintés kezelés
-        toggleButton.addEventListener('touchstart', function(e) {
-            e.preventDefault(); // Megakadályozza az alapértelmezett érintés viselkedést
-        });
-    }
-};
+                    // Mobilbarát érintés kezelés
+                    toggleButton.addEventListener('touchstart', function(e) {
+                        e.preventDefault(); // Megakadályozza az alapértelmezett érintés viselkedést
+                    });
+                }
+            };
         
                 // Színbeállítások betöltése és előnézetek frissítése
                 this.loadColorSettings();
@@ -3234,30 +3520,77 @@ const handleSalaryVisibility = () => {
         }
 
         changeMonth(direction) {
-            this.currentMonth += direction;
-        
-            // Évváltás kezelése a 2024-2028 közötti korlátokon belül
-            if (this.currentMonth < 0) {
-                if (this.currentYear > 2024) {
-                    this.currentMonth = 11;
-                    this.currentYear--;
-                } else {
-                    // Ha 2024 januárjánál korábbra próbálunk menni, nem csinálunk semmit
-                    this.currentMonth = 0;
-                    return;
+            const calendarBody = document.getElementById("calendar-body");
+            const currentMonthElement = document.getElementById("current-month");
+            
+            // Add slide out animation
+            calendarBody.className = direction > 0 ? 'slide-out-left' : 'slide-out-right';
+            
+            setTimeout(() => {
+                // Change month after slide out animation
+                this.currentMonth += direction;
+                
+                if (this.currentMonth < 0) {
+                    if (this.currentYear > 2024) {
+                        this.currentMonth = 11;
+                        this.currentYear--;
+                    } else {
+                        this.currentMonth = 0;
+                        return;
+                    }
+                } else if (this.currentMonth > 11) {
+                    if (this.currentYear < 2028) {
+                        this.currentMonth = 0;
+                        this.currentYear++;
+                    } else {
+                        this.currentMonth = 11;
+                        return;
+                    }
                 }
-            } else if (this.currentMonth > 11) {
-                if (this.currentYear < 2028) {
-                    this.currentMonth = 0;
-                    this.currentYear++;
-                } else {
-                    // Ha 2028 decemberénél későbbre próbálunk menni, nem csinálunk semmit
-                    this.currentMonth = 11;
-                    return;
-                }
-            }
         
-            this.generateCalendar();
+                // Generate new calendar
+                this.generateCalendar();
+                
+                // Add slide in animation
+                calendarBody.className = direction > 0 ? 'slide-in-right' : 'slide-in-left';
+            }, 200); // Match this with animation duration
+        }
+        
+        changePayrollMonth(direction) {
+            const payrollBody = document.getElementById("payroll-body");
+            const currentPayrollMonthElement = document.getElementById("current-payroll-month");
+            
+            // Add slide out animation
+            payrollBody.className = direction > 0 ? 'slide-out-left' : 'slide-out-right';
+            
+            setTimeout(() => {
+                // Change month after slide out animation
+                this.currentPayrollMonth += direction;
+                
+                if (this.currentPayrollMonth < 0) {
+                    if (this.currentPayrollYear > 2024) {
+                        this.currentPayrollMonth = 11;
+                        this.currentPayrollYear--;
+                    } else {
+                        this.currentPayrollMonth = 0;
+                        return;
+                    }
+                } else if (this.currentPayrollMonth > 11) {
+                    if (this.currentPayrollYear < 2028) {
+                        this.currentPayrollMonth = 0;
+                        this.currentPayrollYear++;
+                    } else {
+                        this.currentPayrollMonth = 11;
+                        return;
+                    }
+                }
+        
+                // Generate new payroll table
+                this.generatePayrollTable();
+                
+                // Add slide in animation
+                payrollBody.className = direction > 0 ? 'slide-in-right' : 'slide-in-left';
+            }, 200); // Match this with animation duration
         }
 
         getHolidays(year) {
@@ -3868,7 +4201,7 @@ const handleSalaryVisibility = () => {
 
         initPayrollNavigation() {
             document.getElementById("prev-payroll-month-btn").addEventListener("click", () => {
-                this.currentPayrollMonth--;
+                this.changePayrollMonth(-1);
                 
                 // Évváltás kezelése a 2024-2028 közötti korlátokon belül
                 if (this.currentPayrollMonth < 0) {
@@ -3886,7 +4219,7 @@ const handleSalaryVisibility = () => {
             });
         
             document.getElementById("next-payroll-month-btn").addEventListener("click", () => {
-                this.currentPayrollMonth++;
+                this.changePayrollMonth(1);
                 
                 // Évváltás kezelése a 2024-2028 közötti korlátokon belül
                 if (this.currentPayrollMonth > 11) {
@@ -3928,33 +4261,6 @@ const handleSalaryVisibility = () => {
                 // Jobbra húzás - előző hónap
                 this.changePayrollMonth(-1);
             }
-        }
-
-        changePayrollMonth(direction) {
-            this.currentPayrollMonth += direction;
-        
-            // Évváltás kezelése a 2024-2028 közötti korlátokon belül
-            if (this.currentPayrollMonth < 0) {
-                if (this.currentPayrollYear > 2024) {
-                    this.currentPayrollMonth = 11;
-                    this.currentPayrollYear--;
-                } else {
-                    // Ha 2024 januárjánál korábbra próbálunk menni, nem csinálunk semmit
-                    this.currentPayrollMonth = 0;
-                    return;
-                }
-            } else if (this.currentPayrollMonth > 11) {
-                if (this.currentPayrollYear < 2028) {
-                    this.currentPayrollMonth = 0;
-                    this.currentPayrollYear++;
-                } else {
-                    // Ha 2028 decemberénél későbbre próbálunk menni, nem csinálunk semmit
-                    this.currentPayrollMonth = 11;
-                    return;
-                }
-            }
-        
-            this.generatePayrollTable();
         }
 
         initColorSettings() {
