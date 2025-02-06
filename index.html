@@ -1298,6 +1298,11 @@
         salaryInput.addEventListener('blur', function() {
             if (!isVisible) {
                 originalValue = this.value;
+                // Mentsük el az értéket
+                if (window.app) {
+                    window.app.yearlyData[window.app.currentSettingsYear].settings.besorolasi_ber = originalValue;
+                    window.app.saveYearlyData();
+                }
                 this.type = 'text';
                 this.value = maskValue(originalValue);
             }
