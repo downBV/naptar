@@ -2090,8 +2090,8 @@
                         // Vasárnapi túlórapótlék speciális kezelése A, B, C műszakrendnél
                         let vasarnapiTulorapotlek = 0;
                         if (["A", "B", "C"].includes(pattern)) {
-                            // Vasárnapi túlóra 200%-os pótléka
-                            vasarnapiTulorapotlek = (effectiveSalary / 174) * tuloraOrak.sunday * 2;
+                            // Vasárnapi túlóra 100%-os pótléka
+                            vasarnapiTulorapotlek = (effectiveSalary / 174) * tuloraOrak.sunday;
                         } else {
                             // Egyéb műszakrendek normál 100%-os pótléka
                             vasarnapiTulorapotlek = (effectiveSalary / 174) * tuloraOrak.sunday;
