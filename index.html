@@ -2799,34 +2799,33 @@
                 this.generateCalendar();
                 this.initPayrollNavigation();
                 this.generatePayrollTable();
-                const navButtons = document.querySelectorAll('#navbar button');
-                navButtons.forEach(button => {
-                    button.addEventListener('click', () => {
-                        const sectionId = button.id.replace('-btn', '-section');
-                        this.showSection(sectionId);
-                        navButtons.forEach(btn => btn.classList.remove('active'));
-                        button.classList.add('active');
-                    });
-                });
-        
-                // A kontextus menü és alapértelmezett touch viselkedések letiltása
                 document.addEventListener('contextmenu', function(e) {
                     if (e.target.closest('#navbar')) {
                         e.preventDefault();
                     }
                 }, false);
         
-                // Touch események kezelése
+                // Touch és Click események kombinált kezelése
+                const navButtons = document.querySelectorAll('#navbar button');
                 navButtons.forEach(button => {
-                    button.addEventListener('touchstart', function(e) {
-                        e.preventDefault();
-                        // Aktív állapot beállítása
+                    const handleNavigation = () => {
+                        const sectionId = button.id.replace('-btn', '-section');
+                        this.showSection(sectionId);
                         navButtons.forEach(btn => btn.classList.remove('active'));
                         button.classList.add('active');
+                    };
+        
+                    // Click esemény kezelése
+                    button.addEventListener('click', handleNavigation);
+        
+                    // Touch események kezelése
+                    button.addEventListener('touchstart', function(e) {
+                        e.preventDefault();
                     }, { passive: false });
-                    
+        
                     button.addEventListener('touchend', function(e) {
                         e.preventDefault();
+                        handleNavigation();
                     }, { passive: false });
                 });
         
