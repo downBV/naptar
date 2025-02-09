@@ -67,7 +67,7 @@
     
     #navbar button {
         background-color: #000;
-        border: none;
+        border-radius: 5px;
         color: white;
         width: 100%;
         height: 90px;
@@ -110,9 +110,10 @@
     }
 
     #navbar button.active {
-        background-color: rgba(255, 255, 255, 0.268);
+        background-color: rgba(255, 255, 255, 0.173);
     }
     
+    #calendar-btn.active::before,
     #calendar-btn.active::after {
         content: '';
         position: absolute;
@@ -121,9 +122,15 @@
         width: 100%;
         height: 5px;
         background-color: #ff1f1f;
-        animation: slideIn 0.3s ease-out;
+        box-shadow: 
+            0 0 10px #ff1f1f, 
+            0 0 20px #ff1f1f, 
+            0 0 30px #ff1f1f;
+        animation: neonFlicker 1.5s infinite alternate;
+        animation: slideIn 1s;
     }
 
+    #payroll-btn.active::before,
     #payroll-btn.active::after {
         content: '';
         position: absolute;
@@ -132,29 +139,63 @@
         width: 100%;
         height: 5px;
         background-color: #00F500;
-        animation: slideIn 0.5s ease-out;
+        box-shadow: 
+            0 0 10px #00F500, 
+            0 0 20px #00F500, 
+            0 0 30px #00F500;
+        animation: neonFlicker 1.5s infinite alternate;
+        animation: slideIn 1s;
     }
 
+    #settings-btn.active::before,
     #settings-btn.active::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 5px;
+        background-color: #3582ff;
+        box-shadow: 
+            0 0 10px #3582ff, 
+            0 0 20px #3582ff, 
+            0 0 30px #3582ff;
+        animation: neonFlicker 1.5s infinite alternate;
+        animation: slideIn 1s;
+    }
+
+    #help-btn.active::before,
+    #help-btn.active::after {
         content: '';
         position: absolute;
         bottom: 0;
         left: 0;
         width: 100%;
         height: 5px;
-        background-color: #3582ff;
-        animation: slideOut 0.3s ease-out;
+        background-color: #ffc106;
+        box-shadow: 
+            0 0 10px #ffc106, 
+            0 0 20px #ffc106, 
+            0 0 30px #ffc106;
+        animation: neonFlicker 1.5s infinite alternate;
+        animation: slideIn 1s;
     }
 
-    #help-btn.active::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        right: 1;
-        width: 100%;
-        height: 5px;
-        background-color: #ffc106;
-        animation: slideOut 0.3s ease-out;
+    @keyframes neonFlicker {
+        0%, 18%, 22%, 25%, 53%, 57%, 100% {
+            text-shadow: 
+                0 0 4px #fff,
+                0 0 11px #fff,
+                0 0 19px #fff,
+                0 0 40px,
+                0 0 80px,
+                0 0 90px,
+                0 0 100px,
+                0 0 150px;
+        }
+        20%, 24%, 55% {
+            text-shadow: none;
+        }
     }
     
     /* Gomb lenyomás effekt */
@@ -164,23 +205,96 @@
 
     /* Különböző színű ikonok aktív állapotban */
     #calendar-btn.active .nav-icon {
-        filter: invert(35%) sepia(63%) saturate(7325%) hue-rotate(347deg) brightness(95%) contrast(115%);
-        transform: scale(1.5);
+        filter: 
+            invert(35%) sepia(63%) saturate(7325%) hue-rotate(347deg) brightness(95%) contrast(115%)
+            drop-shadow(0 0 5px rgba(255, 31, 31, 0.7))
+            drop-shadow(0 0 10px rgba(255, 31, 31, 0.5));
+        animation: neonGlowCalendar 1.5s infinite alternate;
     }
-
+    
     #payroll-btn.active .nav-icon {
-        filter: invert(55%) sepia(74%) saturate(3176%) hue-rotate(84deg) brightness(115%) contrast(126%);
-        transform: scale(1.5);
+        filter: 
+            invert(55%) sepia(74%) saturate(3176%) hue-rotate(84deg) brightness(115%) contrast(126%)
+            drop-shadow(0 0 5px rgba(0, 245, 0, 0.7))
+            drop-shadow(0 0 10px rgba(0, 245, 0, 0.5));
+        animation: neonGlowPayroll 1.5s infinite alternate;
     }
-
+    
     #settings-btn.active .nav-icon {
-        filter: invert(47%) sepia(59%) saturate(3362%) hue-rotate(199deg) brightness(101%) contrast(101%);
-        transform: scale(1.5);
+        filter: 
+            invert(47%) sepia(59%) saturate(3362%) hue-rotate(199deg) brightness(101%) contrast(101%)
+            drop-shadow(0 0 5px rgba(53, 130, 255, 0.7))
+            drop-shadow(0 0 10px rgba(53, 130, 255, 0.5));
+        animation: neonGlowSettings 1.5s infinite alternate;
     }
-
+    
     #help-btn.active .nav-icon {
-        filter: invert(84%) sepia(83%) saturate(3096%) hue-rotate(345deg) brightness(96%) contrast(111%);
-        transform: scale(1.5);
+        filter: 
+            invert(84%) sepia(83%) saturate(3096%) hue-rotate(345deg) brightness(96%) contrast(111%)
+            drop-shadow(0 0 5px rgba(255, 193, 6, 0.7))
+            drop-shadow(0 0 10px rgba(255, 193, 6, 0.5));
+        animation: neonGlowHelp 1.5s infinite alternate;
+    }
+    
+    /* Egyedi animációk minden ikonhoz */
+    @keyframes neonGlowCalendar {
+        from {
+            transform: scale(1);
+            filter: 
+                invert(35%) sepia(63%) saturate(7325%) hue-rotate(347deg) brightness(95%) contrast(115%)
+                drop-shadow(0 0 5px rgba(255, 31, 31, 0.7));
+        }
+        to {
+            transform: scale(1.5);
+            filter: 
+                invert(35%) sepia(63%) saturate(7325%) hue-rotate(347deg) brightness(110%) contrast(130%)
+                drop-shadow(0 0 10px rgba(255, 31, 31, 0.9));
+        }
+    }
+    
+    @keyframes neonGlowPayroll {
+        from {
+            transform: scale(1);
+            filter: 
+                invert(55%) sepia(74%) saturate(3176%) hue-rotate(84deg) brightness(115%) contrast(126%)
+                drop-shadow(0 0 5px rgba(0, 245, 0, 0.7));
+        }
+        to {
+            transform: scale(1.5);
+            filter: 
+                invert(55%) sepia(74%) saturate(3176%) hue-rotate(84deg) brightness(130%) contrast(140%)
+                drop-shadow(0 0 10px rgba(0, 245, 0, 0.9));
+        }
+    }
+    
+    @keyframes neonGlowSettings {
+        from {
+            transform: scale(1);
+            filter: 
+                invert(47%) sepia(59%) saturate(3362%) hue-rotate(199deg) brightness(101%) contrast(101%)
+                drop-shadow(0 0 5px rgba(53, 130, 255, 0.7));
+        }
+        to {
+            transform: scale(1.5);
+            filter: 
+                invert(47%) sepia(59%) saturate(3362%) hue-rotate(199deg) brightness(120%) contrast(120%)
+                drop-shadow(0 0 10px rgba(53, 130, 255, 0.9));
+        }
+    }
+    
+    @keyframes neonGlowHelp {
+        from {
+            transform: scale(1);
+            filter: 
+                invert(84%) sepia(83%) saturate(3096%) hue-rotate(345deg) brightness(96%) contrast(111%)
+                drop-shadow(0 0 5px rgba(255, 193, 6, 0.7));
+        }
+        to {
+            transform: scale(1.5);
+            filter: 
+                invert(84%) sepia(83%) saturate(3096%) hue-rotate(345deg) brightness(110%) contrast(130%)
+                drop-shadow(0 0 10px rgba(255, 193, 6, 0.9));
+        }
     }
 
     #calendar-btn button.active::after{
@@ -190,19 +304,14 @@
     /* Animációk */
     @keyframes slideIn {
         from {
-            transform: translateX(-100%);
+            left: 50%;
+            right: 50%;
+            width: 0;
         }
         to {
-            transform: translateX(0);
-        }
-    }
-
-    @keyframes slideOut {
-        from {
-            transform: translateX(100%);
-        }
-        to {
-            transform: translateX(0);
+            left: 0;
+            right: 0;
+            width: 100%;
         }
     }
     
