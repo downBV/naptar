@@ -1466,159 +1466,126 @@
     let app;
 
     function initSalaryVisibility() {
-    const salaryInput = document.getElementById('base-salary');
-    const toggleButton = document.createElement('button');
-    toggleButton.id = 'toggle-salary-visibility';
-    toggleButton.className = 'visibility-toggle';
-    toggleButton.innerHTML = '👁️‍🗨️';
-    let isVisible = false;
-    let originalValue = salaryInput?.value || '';
-    let hideTimeout;
-
-    // CSS animációk
-    const style = document.createElement('style');
-    style.textContent = `
-        .salary-input {
-            transition: opacity 0.3s ease-in-out;
-        }
-        .salary-fade {
-            opacity: 0.5;
-        }
-        .visibility-toggle {
-            transition: transform 0.2s ease;
-        }
-        .visibility-toggle:active {
-            transform: translateY(-50%) scale(0.9);
-        }
-    `;
-    document.head.appendChild(style);
-
-    // Stílusok beállítása
-    toggleButton.style.cssText = `
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 15px;
-        font-size: 24px;
-        z-index: 10;
-        touch-action: manipulation;
-        -webkit-tap-highlight-color: transparent;
-    `;
-
-    // Érték maszkolása
-    const maskValue = (value) => '•'.repeat(String(value).length);
-
-    // Bérszámfejtés frissítése
-    const updatePayroll = (value) => {
-        if (window.app) {
-            window.app.yearlyData[window.app.currentSettingsYear].settings.besorolasi_ber = value;
-            window.app.saveYearlyData();
-            window.app.generatePayrollTable();
-        }
-    };
-
-    // Érték megjelenítés kezelése
-    const updateInputVisibility = () => {
-        if (isVisible) {
-            salaryInput.type = 'number';
-            salaryInput.value = originalValue;
-        } else {
-            salaryInput.type = 'text';
-            salaryInput.value = maskValue(originalValue);
-        }
-    };
-
-    if (salaryInput) {
-        salaryInput.parentElement.style.position = 'relative';
-        salaryInput.style.paddingRight = '45px';
-        salaryInput.parentElement.appendChild(toggleButton);
-
-        // Kezdeti állapot beállítása
-        updateInputVisibility();
-
-        // Input eseménykezelő
-        salaryInput.addEventListener('input', function(e) {
-            clearTimeout(hideTimeout);
-            if (this.type === 'number') {
-                originalValue = this.value;
-                // Bérszámfejtés frissítése
-                updatePayroll(originalValue);
+        const salaryInput = document.getElementById('base-salary');
+        if (!salaryInput) return null;
+    
+        // Konténer létrehozása
+        const container = document.createElement('div');
+        container.style.position = 'relative';
+        salaryInput.parentNode.insertBefore(container, salaryInput);
+        container.appendChild(salaryInput);
+    
+        // Létrehozunk egy rejtett input mezőt a tényleges érték tárolásához
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.id = 'real-salary';
+        hiddenInput.value = salaryInput.value;
+        container.appendChild(hiddenInput);
+    
+        // Láthatóság kapcsoló gomb
+        const toggleButton = document.createElement('button');
+        toggleButton.innerHTML = '👁️‍🗨️';
+        toggleButton.style.position = 'absolute';
+        toggleButton.style.right = '10px';
+        toggleButton.style.top = '50%';
+        toggleButton.style.transform = 'translateY(-50%)';
+        toggleButton.style.background = 'none';
+        toggleButton.style.border = 'none';
+        toggleButton.style.cursor = 'pointer';
+        toggleButton.style.padding = '15px';
+        toggleButton.style.fontSize = '24px';
+        toggleButton.style.zIndex = '10';
+        container.appendChild(toggleButton);
+    
+        let isVisible = false;
+    
+        // Érték maszkolása
+        const maskValue = (value) => '•'.repeat(String(value).length);
+    
+        // Közvetlen mentés az alkalmazásba
+        const saveToApp = (value) => {
+            if (window.app && value && !isNaN(value)) {
+                // Közvetlenül módosítjuk az input értékét
+                hiddenInput.value = value;
                 
-                if (!isVisible) {
-                    hideTimeout = setTimeout(() => {
-                        this.type = 'text';
-                        this.value = maskValue(originalValue);
-                    }, 1500);
-                }
+                // Frissítjük az alkalmazás adatait
+                window.app.yearlyData[window.app.currentSettingsYear].settings.besorolasi_ber = value;
+                window.app.saveYearlyData();
+                window.app.generatePayrollTable();
+            }
+        };
+    
+        // Input beállítása
+        salaryInput.style.paddingRight = '45px';
+        salaryInput.type = 'text';
+    
+        // Input eseménykezelők
+        salaryInput.addEventListener('focus', () => {
+            salaryInput.value = hiddenInput.value;
+        });
+    
+        salaryInput.addEventListener('input', (e) => {
+            const newValue = e.target.value;
+            if (newValue && !isNaN(newValue)) {
+                hiddenInput.value = newValue;
+                saveToApp(newValue);
             }
         });
-
-        // Láthatóság váltás kezelése
+    
+        salaryInput.addEventListener('blur', () => {
+            const currentValue = salaryInput.value;
+            if (currentValue && !isNaN(currentValue)) {
+                hiddenInput.value = currentValue;
+                saveToApp(currentValue);
+            }
+            if (!isVisible) {
+                salaryInput.value = maskValue(hiddenInput.value);
+            }
+        });
+    
+        // Láthatóság kapcsoló
         const toggleVisibility = (e) => {
             e.preventDefault();
             e.stopPropagation();
             
             isVisible = !isVisible;
-            clearTimeout(hideTimeout);
-            
-            updateInputVisibility();
             toggleButton.innerHTML = isVisible ? '👁️' : '👁️‍🗨️';
+            
+            if (isVisible) {
+                salaryInput.value = hiddenInput.value;
+            } else {
+                salaryInput.value = maskValue(hiddenInput.value);
+            }
         };
-
-        // Touch és click események
+    
+        // Gomb eseménykezelők
+        toggleButton.addEventListener('click', toggleVisibility);
         toggleButton.addEventListener('touchstart', toggleVisibility, { passive: false });
         toggleButton.addEventListener('touchend', (e) => {
             e.preventDefault();
             e.stopPropagation();
         }, { passive: false });
-        toggleButton.addEventListener('click', toggleVisibility);
-
-        // Focus események
-        salaryInput.addEventListener('focus', function() {
-            clearTimeout(hideTimeout);
-            if (!isVisible) {
-                this.type = 'number';
-                this.value = originalValue;
-            }
-        });
-
-        salaryInput.addEventListener('blur', function() {
-            if (!isVisible) {
-                originalValue = this.value;
-                // Mentsük el az értéket
-                if (window.app) {
-                    window.app.yearlyData[window.app.currentSettingsYear].settings.besorolasi_ber = originalValue;
-                    window.app.saveYearlyData();
-                }
-                this.type = 'text';
-                this.value = maskValue(originalValue);
-            }
-        });
-    }
-
-    return {
-        getValue: () => originalValue,
-        setValue: (value) => {
-            originalValue = value;
-            if (salaryInput) {
-                if (!isVisible) {
-                    salaryInput.type = 'text';
-                    salaryInput.value = maskValue(value);
-                } else {
-                    salaryInput.type = 'number';
-                    salaryInput.value = value;
-                }
-            }
-            // Bérszámfejtés frissítése értékbeállításkor is
-            updatePayroll(value);
+    
+        // Kezdeti megjelenítés
+        if (!isVisible) {
+            salaryInput.value = maskValue(hiddenInput.value);
         }
-    };
+    
+        return {
+            getValue: () => hiddenInput.value,
+            setValue: (value) => {
+                if (value && !isNaN(value)) {
+                    hiddenInput.value = value;
+                    if (isVisible) {
+                        salaryInput.value = value;
+                    } else {
+                        salaryInput.value = maskValue(value);
+                    }
+                    saveToApp(value);
+                }
+            }
+        };
     }
-
         
     const SHIFT_COLORS = {
         Nappal: ["#FFD700", "black"],
@@ -3744,64 +3711,135 @@
                         let isVisible = false;
                         let hideTimeout;
                     
-                        if (salaryInput && toggleButton) {
-                    // Kezdeti érték elrejtése funkció - most pontokat használunk csillagok helyett
-                    const maskValue = (value) => '•'.repeat(value.toString().length);
+                        // CSS animációk
+                        const style = document.createElement('style');
+                        style.textContent = `
+                            .salary-input {
+                                transition: opacity 0.3s ease-in-out;
+                            }
+                            .salary-fade {
+                                opacity: 0.5;
+                            }
+                            .visibility-toggle {
+                                transition: transform 0.2s ease;
+                            }
+                            .visibility-toggle:active {
+                                transform: translateY(-50%) scale(0.9);
+                            }
+                        `;
+                        document.head.appendChild(style);
                     
-                    // Input eseménykezelő
-                    salaryInput.addEventListener('input', function(e) {
-                        clearTimeout(hideTimeout);
-                        const value = e.target.value;
-                        
-                        // Érték ideiglenes megjelenítése
-                        this.type = 'number';
-                        this.value = value;
-                        
-                        // Időzítő beállítása az elrejtéshez
-                        if (!isVisible) {
-                            hideTimeout = setTimeout(() => {
-                                this.type = 'text';
-                                this.value = maskValue(value);
-                                this.classList.add('masked-value');
-                            }, 1500);
+                        // Érték maszkolása
+                        const maskValue = (value) => '•'.repeat(String(value).length);
+                    
+                        // Bérszámfejtés frissítése - MÓDOSÍTVA
+                        const updatePayroll = (value) => {
+                            if (window.app) {
+                                window.app.yearlyData[window.app.currentSettingsYear].settings.besorolasi_ber = value;
+                                window.app.saveYearlyData();
+                                window.app.generatePayrollTable();
+                            }
+                        };
+                    
+                        // Érték mentése - ÚJ FÜGGVÉNY
+                        const saveValue = () => {
+                            const currentValue = salaryInput.value.replace(/[•]/g, '');
+                            updatePayroll(currentValue);
+                        };
+                    
+                        // Érték megjelenítés kezelése
+                        const updateInputVisibility = () => {
+                            if (isVisible) {
+                                salaryInput.type = 'number';
+                                salaryInput.value = salaryInput.value.replace(/[•]/g, '');
+                            } else {
+                                salaryInput.type = 'text';
+                                salaryInput.value = maskValue(salaryInput.value);
+                            }
+                        };
+                    
+                        if (salaryInput) {
+                            salaryInput.parentElement.style.position = 'relative';
+                            salaryInput.style.paddingRight = '45px';
+                            salaryInput.parentElement.appendChild(toggleButton);
+                    
+                            // Kezdeti állapot beállítása
+                            updateInputVisibility();
+                    
+                            // Input eseménykezelő - MÓDOSÍTVA
+                            salaryInput.addEventListener('input', function(e) {
+                                clearTimeout(hideTimeout);
+                                if (this.type === 'number') {
+                                    saveValue(); // Mentjük az értéket
+                                    
+                                    if (!isVisible) {
+                                        hideTimeout = setTimeout(() => {
+                                            this.type = 'text';
+                                            this.value = maskValue(this.value);
+                                        }, 1500);
+                                    }
+                                }
+                            });
+                    
+                            // Láthatóság váltás kezelése - MÓDOSÍTVA
+                            const toggleVisibility = (e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                
+                                isVisible = !isVisible;
+                                clearTimeout(hideTimeout);
+                                
+                                // Értéket itt is mentjük
+                                saveValue();
+                                
+                                updateInputVisibility();
+                                toggleButton.innerHTML = isVisible ? '👁️' : '👁️‍🗨️';
+                            };
+                    
+                            // Touch és click események
+                            toggleButton.addEventListener('touchstart', toggleVisibility, { passive: false });
+                            toggleButton.addEventListener('touchend', (e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                            }, { passive: false });
+                            toggleButton.addEventListener('click', toggleVisibility);
+                    
+                            // Focus és blur események - MÓDOSÍTVA
+                            salaryInput.addEventListener('focus', function() {
+                                clearTimeout(hideTimeout);
+                                if (!isVisible) {
+                                    this.type = 'number';
+                                    this.value = this.value.replace(/[•]/g, '');
+                                }
+                            });
+                    
+                            salaryInput.addEventListener('blur', function() {
+                                saveValue(); // Mentjük az értéket blur eseménynél is
+                                
+                                if (!isVisible) {
+                                    this.type = 'text';
+                                    this.value = maskValue(this.value);
+                                }
+                            });
                         }
-                    });
-            
-                    // Láthatóság kapcsoló
-                    toggleButton.addEventListener('click', function() {
-                        isVisible = !isVisible;
-                        const currentValue = salaryInput.value.replace(/[•]/g, '');
-                        
-                        if (isVisible) {
-                            salaryInput.type = 'number';
-                            salaryInput.value = currentValue;
-                            this.textContent = '×';
-                            salaryInput.classList.remove('masked-value');
-                        } else {
-                            salaryInput.type = 'text';
-                            salaryInput.value = maskValue(currentValue);
-                            this.textContent = '•••';
-                            salaryInput.classList.add('masked-value');
-                        }
-                        
-                        // Gomb animáció
-                        this.style.transform = 'scale(0.8)';
-                        setTimeout(() => {
-                            this.style.transform = 'scale(1)';
-                        }, 100);
-                    });
-            
-                    // Kezdeti állapot beállítása
-                    salaryInput.type = 'text';
-                    salaryInput.value = maskValue(salaryInput.value);
-                    salaryInput.classList.add('masked-value');
-            
-                    // Mobilbarát érintés kezelés
-                    toggleButton.addEventListener('touchstart', function(e) {
-                        e.preventDefault(); // Megakadályozza az alapértelmezett érintés viselkedést
-                    });
-                }
-            };
+                    
+                        return {
+                            getValue: () => salaryInput.value.replace(/[•]/g, ''),
+                            setValue: (value) => {
+                                if (salaryInput) {
+                                    if (!isVisible) {
+                                        salaryInput.type = 'text';
+                                        salaryInput.value = maskValue(value);
+                                    } else {
+                                        salaryInput.type = 'number';
+                                        salaryInput.value = value;
+                                    }
+                                }
+                                // Bérszámfejtés frissítése értékbeállításkor is
+                                updatePayroll(value);
+                            }
+                        };
+                    };
         
                 // Színbeállítások betöltése és előnézetek frissítése
                 this.loadColorSettings();
@@ -5285,9 +5323,10 @@
                 }
         
                 // A beállítások mentése
+                const realSalaryInput = document.getElementById('real-salary');
                 this.yearlyData[this.currentSettingsYear].settings = {
                     ...this.yearlyData[this.currentSettingsYear].settings,
-                    besorolasi_ber: baseSalaryInput.value,
+                    besorolasi_ber: realSalaryInput ? realSalaryInput.value : baseSalaryInput.value,
                     szabadsag: vacationDaysInput?.value || "25",
                     muszakrend: newShiftPattern,
                     other_income: otherIncomeInput?.value || "0",
