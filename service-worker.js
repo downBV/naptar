@@ -3,6 +3,10 @@ const urlsToCache = [
   '/naptar/',
   '/naptar/index.html',
   '/naptar/icon.png',
+  '/naptar/ber.png',
+  '/naptar/settings.png',
+  '/naptar/calendar.png',
+  '/naptar/info.png',
   '/naptar/manifest.json'
 ];
 
