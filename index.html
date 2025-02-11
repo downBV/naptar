@@ -86,6 +86,9 @@
         user-select: none;
         -webkit-user-select: none;
         -webkit-touch-callout: none;
+        margin-bottom: 3px;  /* Extra margó az alsó vonalnak */
+        transform-style: preserve-3d;  /* 3D transzformációk megtartása */
+        backface-visibility: hidden;
     }
 
     @media (hover: hover) {
@@ -111,74 +114,136 @@
 
     #navbar button.active {
         background-color: rgba(255, 255, 255, 0.173);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Vízszintes vonalak */
+    #navbar button.active::before,
+    #navbar button.active::after {
+        content: '';
+        position: absolute;
+        height: 3px;
+        bottom: 0;
+        width: 50%;
+        opacity: 1;
+        z-index: 1;
+    }
+    
+    #navbar button.active::before {
+        left: 0;
+        transform-origin: right;
+        animation: slideLeftBorder 1s forwards;
+    }
+
+    #navbar button.active::after {
+        right: 0;
+        transform-origin: left;
+        animation: slideRightBorder 1s forwards;
+    }
+
+    #navbar button.active > span::before,
+    #navbar button.active > span::after {
+        content: '';
+        position: absolute;
+        width: 3px;
+        height: 0;
+        bottom: 0;
+    }
+
+    #navbar button.active > span::before {
+        left: 0;
+        animation: slideUpLeft 1s 1s forwards;
+    }
+
+    #navbar button.active > span::after {
+        right: 0;
+        animation: slideUpRight 1s 1s forwards;
+    }
+
+    /* Felső vonalak */
+    #navbar button.active > span > i,
+    #navbar button.active > span > em {
+        content: '';
+        position: absolute;
+        top: 0;
+        height: 3px;
+        width: 0;
+    }
+
+    #navbar button.active > span > i {
+        left: 0;
+        animation: slideTopLeft 1s 2s forwards;
+    }
+
+    #navbar button.active > span > em {
+        right: 0;
+        animation: slideTopRight 1s 2s forwards;
     }
     
     #calendar-btn.active::before,
-    #calendar-btn.active::after {
+    #calendar-btn.active::after,
+    #calendar-btn.active > span::before,
+    #calendar-btn.active > span::after,
+    #calendar-btn.active > span > i,
+    #calendar-btn.active > span > em {
         content: '';
         position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 3px;
         background-color: #ff1f1f;
+        opacity: 1;
         box-shadow: 
             0 0 10px #ff1f1f, 
             0 0 20px #ff1f1f, 
-            0 0 30px #ff1f1f;
-        animation: neonFlicker 1.5s infinite alternate;
-        animation: slideIn 1s;
+            0 0 30px #ff1f1f,
+            0 0 40px #ff1f1f; 
     }
 
     #payroll-btn.active::before,
-    #payroll-btn.active::after {
+    #payroll-btn.active::after,
+    #payroll-btn.active > span::before,
+    #payroll-btn.active > span::after,
+    #payroll-btn.active > span > i,
+    #payroll-btn.active > span > em {
         content: '';
         position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 3px;
         background-color: #00F500;
+        opacity: 1;
         box-shadow: 
             0 0 10px #00F500, 
             0 0 20px #00F500, 
             0 0 30px #00F500;
-        animation: neonFlicker 1.5s infinite alternate;
-        animation: slideIn 1s;
     }
 
     #settings-btn.active::before,
-    #settings-btn.active::after {
+    #settings-btn.active::after,
+    #settings-btn.active > span::before,
+    #settings-btn.active > span::after,
+    #settings-btn.active > span > i,
+    #settings-btn.active > span > em {
         content: '';
         position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 100%;
-        height: 3px;
         background-color: #3582ff;
+        opacity: 1;
         box-shadow: 
             0 0 10px #3582ff, 
             0 0 20px #3582ff, 
             0 0 30px #3582ff;
-        animation: neonFlicker 1.5s infinite alternate;
-        animation: slideIn 1s;
     }
 
     #help-btn.active::before,
-    #help-btn.active::after {
+    #help-btn.active::after,
+    #help-btn.active > span::before,
+    #help-btn.active > span::after,
+    #help-btn.active > span > i,
+    #help-btn.active > span > em {
         content: '';
         position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 3px;
         background-color: #ffc106;
+        opacity: 1;
         box-shadow: 
             0 0 10px #ffc106, 
             0 0 20px #ffc106, 
             0 0 30px #ffc106;
-        animation: neonFlicker 1.5s infinite alternate;
-        animation: slideIn 1s;
     }
 
     @keyframes neonFlicker {
@@ -206,7 +271,14 @@
     /* Különböző színű ikonok aktív állapotban */
     #calendar-btn.active .nav-icon {
         filter: 
-            invert(35%) sepia(63%) saturate(7325%) hue-rotate(347deg) brightness(95%) contrast(115%)
+            brightness(0) /* Először feketévé tesszük */
+            saturate(100%) /* Teljes szaturáció */
+            invert(21%) /* Piros szín beállítása */
+            sepia(95%) 
+            saturate(6932%) 
+            hue-rotate(359deg) 
+            brightness(101%) 
+            contrast(120%)
             drop-shadow(0 0 5px rgba(255, 31, 31, 0.7))
             drop-shadow(0 0 10px rgba(255, 31, 31, 0.5));
         animation: neonGlowCalendar 5s infinite alternate;
@@ -214,7 +286,14 @@
     
     #payroll-btn.active .nav-icon {
         filter: 
-            invert(55%) sepia(74%) saturate(3176%) hue-rotate(84deg) brightness(115%) contrast(126%)
+            brightness(0)
+            saturate(100%)
+            invert(56%) /* Zöld szín beállítása */
+            sepia(96%) 
+            saturate(1742%) 
+            hue-rotate(87deg) 
+            brightness(128%) 
+            contrast(119%)
             drop-shadow(0 0 5px rgba(0, 245, 0, 0.7))
             drop-shadow(0 0 10px rgba(0, 245, 0, 0.5));
         animation: neonGlowPayroll 5s infinite alternate;
@@ -222,7 +301,14 @@
     
     #settings-btn.active .nav-icon {
         filter: 
-            invert(47%) sepia(59%) saturate(3362%) hue-rotate(199deg) brightness(101%) contrast(101%)
+            brightness(0)
+            saturate(100%)
+            invert(45%) /* Kék szín beállítása */
+            sepia(98%) 
+            saturate(1840%) 
+            hue-rotate(203deg) 
+            brightness(103%) 
+            contrast(105%)
             drop-shadow(0 0 5px rgba(53, 130, 255, 0.7))
             drop-shadow(0 0 10px rgba(53, 130, 255, 0.5));
         animation: neonGlowSettings 5s infinite alternate;
@@ -230,7 +316,14 @@
     
     #help-btn.active .nav-icon {
         filter: 
-            invert(84%) sepia(83%) saturate(3096%) hue-rotate(345deg) brightness(96%) contrast(111%)
+            brightness(0)
+            saturate(100%)
+            invert(83%) /* Sárga szín beállítása */
+            sepia(32%) 
+            saturate(5139%) 
+            hue-rotate(359deg) 
+            brightness(103%) 
+            contrast(104%)
             drop-shadow(0 0 5px rgba(255, 193, 6, 0.7))
             drop-shadow(0 0 10px rgba(255, 193, 6, 0.5));
         animation: neonGlowHelp 5s infinite alternate;
@@ -241,14 +334,26 @@
         from {
             transform: scale(1.2);
             filter: 
-                invert(35%) sepia(63%) saturate(7325%) hue-rotate(347deg) brightness(95%) contrast(115%)
-                drop-shadow(0 0 5px rgba(255, 31, 31, 0.7));
+                brightness(0)
+                saturate(100%)
+                invert(21%)
+                sepia(95%) 
+                saturate(6932%) 
+                hue-rotate(359deg) 
+                brightness(101%) 
+                contrast(120%);
         }
         to {
             transform: scale(1.5);
             filter: 
-                invert(35%) sepia(63%) saturate(7325%) hue-rotate(347deg) brightness(110%) contrast(130%)
-                drop-shadow(0 0 10px rgba(255, 31, 31, 0.9));
+                brightness(0)
+                saturate(100%)
+                invert(21%)
+                sepia(95%) 
+                saturate(7932%) 
+                hue-rotate(359deg) 
+                brightness(110%) 
+                contrast(130%);
         }
     }
     
@@ -256,14 +361,26 @@
         from {
             transform: scale(1.2);
             filter: 
-                invert(55%) sepia(74%) saturate(3176%) hue-rotate(84deg) brightness(115%) contrast(126%)
-                drop-shadow(0 0 5px rgba(0, 245, 0, 0.7));
+                brightness(0)
+                saturate(100%)
+                invert(56%)
+                sepia(96%) 
+                saturate(1742%) 
+                hue-rotate(87deg) 
+                brightness(128%) 
+                contrast(119%);
         }
         to {
             transform: scale(1.5);
             filter: 
-                invert(55%) sepia(74%) saturate(3176%) hue-rotate(84deg) brightness(130%) contrast(140%)
-                drop-shadow(0 0 10px rgba(0, 245, 0, 0.9));
+                brightness(0)
+                saturate(100%)
+                invert(56%)
+                sepia(96%) 
+                saturate(1842%) 
+                hue-rotate(87deg) 
+                brightness(138%) 
+                contrast(129%);
         }
     }
     
@@ -271,14 +388,26 @@
         from {
             transform: scale(1.2);
             filter: 
-                invert(47%) sepia(59%) saturate(3362%) hue-rotate(199deg) brightness(101%) contrast(101%)
-                drop-shadow(0 0 5px rgba(53, 130, 255, 0.7));
+                brightness(0)
+                saturate(100%)
+                invert(45%)
+                sepia(98%) 
+                saturate(1840%) 
+                hue-rotate(203deg) 
+                brightness(103%) 
+                contrast(105%);
         }
         to {
             transform: scale(1.5);
             filter: 
-                invert(47%) sepia(59%) saturate(3362%) hue-rotate(199deg) brightness(120%) contrast(120%)
-                drop-shadow(0 0 10px rgba(53, 130, 255, 0.9));
+                brightness(0)
+                saturate(100%)
+                invert(45%)
+                sepia(98%) 
+                saturate(1940%) 
+                hue-rotate(203deg) 
+                brightness(113%) 
+                contrast(115%);
         }
     }
     
@@ -286,14 +415,26 @@
         from {
             transform: scale(1.2);
             filter: 
-                invert(84%) sepia(83%) saturate(3096%) hue-rotate(345deg) brightness(96%) contrast(111%)
-                drop-shadow(0 0 5px rgba(255, 193, 6, 0.7));
+                brightness(0)
+                saturate(100%)
+                invert(83%)
+                sepia(32%) 
+                saturate(5139%) 
+                hue-rotate(359deg) 
+                brightness(103%) 
+                contrast(104%);
         }
         to {
             transform: scale(1.5);
             filter: 
-                invert(84%) sepia(83%) saturate(3096%) hue-rotate(345deg) brightness(110%) contrast(130%)
-                drop-shadow(0 0 10px rgba(255, 193, 6, 0.9));
+                brightness(0)
+                saturate(100%)
+                invert(83%)
+                sepia(32%) 
+                saturate(5239%) 
+                hue-rotate(359deg) 
+                brightness(113%) 
+                contrast(114%);
         }
     }
 
@@ -302,6 +443,82 @@
     }
     
     /* Animációk */
+    @keyframes slideUpLeft {
+        0% {
+            height: 0;
+        }
+        100% {
+            height: 100%;
+        }
+    }
+    
+    @keyframes slideUpRight {
+        0% {
+            height: 0;
+        }
+        100% {
+            height: 100%;
+        }
+    }
+    
+    @keyframes slideTopLeft {
+        0% {
+            width: 0;
+        }
+        100% {
+            width: 50%;
+        }
+    }
+    
+    @keyframes slideTopRight {
+        0% {
+            width: 0;
+        }
+        100% {
+            width: 50%;
+        }
+    }
+
+    @keyframes slideLeftBorder {
+        0% {
+            transform: scaleX(0);
+        }
+        100% {
+            transform: scaleX(1);
+        }
+    }
+    
+    @keyframes slideRightBorder {
+        0% {
+            transform: scaleX(0);
+        }
+        100% {
+            transform: scaleX(1);
+        }
+    }
+
+    @keyframes borderSlideInHorizontal {
+        from {
+            width: 0;
+            opacity: 0;
+        }
+        to {
+            width: 100%;
+            opacity: 1;
+        }
+    }
+    
+    @keyframes borderSlideInVertical {
+        from {
+            height: 0;
+            opacity: 0;
+        }
+        to {
+            height: 100%;
+            opacity: 1;
+        }
+    }
+
     @keyframes slideIn {
         from {
             left: 50%;
@@ -1066,15 +1283,31 @@
 <body>
     <div id="navbar">
         <button id="calendar-btn">
+            <span>
+                <i></i>
+                <em></em>
+            </span>
             <img src="calendar.png" alt="Naptár" class="nav-icon"/>
         </button>
         <button id="payroll-btn">
+            <span>
+                <i></i>
+                <em></em>
+            </span>
             <img src="ber.png" alt="Bérszámfejtés" class="nav-icon"/>
         </button>
         <button id="settings-btn">
+            <span>
+                <i></i>
+                <em></em>
+            </span>
             <img src="settings.png" alt="Beállítások" class="nav-icon"/>
         </button>
         <button id="help-btn">
+            <span>
+                <i></i>
+                <em></em>
+            </span>
             <img src="info.png" alt="Súgó" class="nav-icon"/>
         </button>
     </div>
