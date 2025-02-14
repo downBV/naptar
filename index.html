@@ -580,6 +580,7 @@
         border-collapse: collapse;
         table-layout: fixed;
         margin-bottom: 0;
+        box-shadow: 0 0 8px black;
     }
 
     #calendarTable th {
@@ -589,7 +590,8 @@
         text-align: center;
         vertical-align: center;
         height: 40px;
-        width: 14.28571%;   
+        width: 14.28571%;
+        box-shadow: 0 0 5px black;
     }
     #calendarTable td {
         border: 3px groove #ddd;
@@ -599,6 +601,7 @@
         vertical-align: top;
         height: 80px;
         width: 14.28571%;
+        box-shadow: 0 0 5px black;
     }
 
     .date-container {
@@ -611,10 +614,12 @@
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
+        box-shadow: 0 0 5px black;
     }
 
     .date-number {
         font-weight: bold;
+        box-shadow: 0 0 4px rgb(103, 103, 103);
         margin: 3px 3px;
         font-size: 10px;
         color: #333;
@@ -922,8 +927,8 @@
         cursor: pointer;
         text-align: center;
         word-break: break-all;
+        box-shadow: 0px 0px 4px black;
     }
-
     select.shift-select {
         appearance: menulist;
         -webkit-appearance: menulist;
@@ -998,17 +1003,26 @@
 
     #payroll-table {
         width: 100%;
-        border-collapse: collapse;
+        border: 2px solid #000;
+        border-collapse: separate;  /* Külön cellák */
+        border-spacing: 0;  /* Nincs térköz */
     }
-
+    
+    #payroll-table tr {
+        transition: all 0.2s ease;  /* Sima átmenet */
+    }
+    
     #payroll-table th,
     #payroll-table td {
-        border: 3px solid #000;
+        border: 2px solid #000;
+        border-width: 2px thin;  /* Explicit szegélyvastagság */
+        box-shadow: 0 0 8px rgb(0, 0, 0);
         padding: 8px;
         text-align: left;
         font-weight: bold;
+        transition: border-width 0.2s ease;  /* Szegély átmenete */
     }
-
+    
     #payroll-table tr:nth-child(even) {
         background-color: #f2f2f2;
     }
@@ -1116,6 +1130,24 @@
     .visibility-toggle:active {
       transform: scale(0.9);
     }
+
+    #calendar-section, #payroll-section {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    #calendar-body, #payroll-body {
+        animation-duration: 0.2s;
+        animation-fill-mode: both;
+    }
+
+    #calendar-body td{
+        box-shadow: 0 0 5px black;
+    }
+
+    #payroll-body {
+        will-change: transform, opacity;
+    }
     
     @keyframes fadeMask {
       from { opacity: 0; }
@@ -1128,12 +1160,12 @@
 
     @keyframes slideInRight {
         from {
-            transform: translateX(100%);
             opacity: 0;
+            transform: translate3d(100%, 0, 0);
         }
         to {
-            transform: translateX(0);
             opacity: 1;
+            transform: translate3d(0, 0, 0);
         }
     }
     
@@ -1170,15 +1202,6 @@
         }
     }
     
-    #calendar-section, #payroll-section {
-        position: relative;
-        overflow: hidden;
-    }
-    
-    #calendar-body, #payroll-body {
-        animation-duration: 0.2s;
-        animation-fill-mode: both;
-    }
     
     .slide-in-right {
         animation-name: slideInRight;
@@ -4103,7 +4126,7 @@
                 
                 // Add slide in animation
                 calendarBody.className = direction > 0 ? 'slide-in-right' : 'slide-in-left';
-            }, 200); // Match this with animation duration
+            }, 300); // Match this with animation duration
         }
         
         changePayrollMonth(direction) {
