@@ -4091,78 +4091,71 @@
         }
 
         changeMonth(direction) {
-            const calendarBody = document.getElementById("calendar-body");
-            const currentMonthElement = document.getElementById("current-month");
-            // Add slide out animation
-            calendarBody.className = direction > 0 ? 'slide-out-left' : 'slide-out-right';
-            
-            setTimeout(() => {
-                // Change month after slide out animation
-                this.currentMonth += direction;
-                
-                if (this.currentMonth < 0) {
-                    if (this.currentYear > 2024) {
-                        this.currentMonth = 11;
-                        this.currentYear--;
-                    } else {
-                        this.currentMonth = 0;
-                        return;
-                    }
-                } else if (this.currentMonth > 11) {
-                    if (this.currentYear < 2028) {
-                        this.currentMonth = 0;
-                        this.currentYear++;
-                    } else {
-                        this.currentMonth = 11;
-                        return;
-                    }
-                }
+    const newYear = this.currentYear + (this.currentMonth + direction < 0 ? -1 : this.currentMonth + direction > 11 ? 1 : 0);
+    
+    // Korlátozzuk az éveket 2024 és 2028 között
+    if (newYear < 2024 || newYear > 2028) {
+        return; // Nem megyünk tovább, ha elértük a korlátokat
+    }
+
+    const calendarBody = document.getElementById("calendar-body");
+    
+    // Add slide out animation
+    calendarBody.className = direction > 0 ? 'slide-out-left' : 'slide-out-right';
+    
+    setTimeout(() => {
+        // Change month after slide out animation
+        this.currentMonth += direction;
         
-                // Generate new calendar
-                this.generateCalendar();
-                
-                // Add slide in animation
-                calendarBody.className = direction > 0 ? 'slide-in-right' : 'slide-in-left';
-            }, 300); // Match this with animation duration
+        if (this.currentMonth < 0) {
+            this.currentMonth = 11;
+            this.currentYear--;
+        } else if (this.currentMonth > 11) {
+            this.currentMonth = 0;
+            this.currentYear++;
         }
+
+        // Generate new calendar
+        this.generateCalendar();
         
+        // Add slide in animation
+        calendarBody.className = direction > 0 ? 'slide-in-right' : 'slide-in-left';
+    }, 300);
+        }
         
         changePayrollMonth(direction) {
-            const payrollBody = document.getElementById("payroll-body");
-            const currentPayrollMonthElement = document.getElementById("current-payroll-month");
-            
-            // Add slide out animation
-            payrollBody.className = direction > 0 ? 'slide-out-left' : 'slide-out-right';
-            
-            setTimeout(() => {
-                // Change month after slide out animation
-                this.currentPayrollMonth += direction;
-                
-                if (this.currentPayrollMonth < 0) {
-                    if (this.currentPayrollYear > 2024) {
-                        this.currentPayrollMonth = 11;
-                        this.currentPayrollYear--;
-                    } else {
-                        this.currentPayrollMonth = 0;
-                        return;
-                    }
-                } else if (this.currentPayrollMonth > 11) {
-                    if (this.currentPayrollYear < 2028) {
-                        this.currentPayrollMonth = 0;
-                        this.currentPayrollYear++;
-                    } else {
-                        this.currentPayrollMonth = 11;
-                        return;
-                    }
-                }
+    const newYear = this.currentPayrollYear + (this.currentPayrollMonth + direction < 0 ? -1 : this.currentPayrollMonth + direction > 11 ? 1 : 0);
+    
+    // Korlátozzuk az éveket 2024 és 2028 között
+    if (newYear < 2024 || newYear > 2028) {
+        return; // Nem megyünk tovább, ha elértük a korlátokat
+    }
+
+    const payrollBody = document.getElementById("payroll-body");
+    
+    // Add slide out animation
+    payrollBody.className = direction > 0 ? 'slide-out-left' : 'slide-out-right';
+    
+    setTimeout(() => {
+        // Change month after slide out animation
+        this.currentPayrollMonth += direction;
         
-                // Generate new payroll table
-                this.generatePayrollTable();
-                
-                // Add slide in animation
-                payrollBody.className = direction > 0 ? 'slide-in-right' : 'slide-in-left';
-            }, 200); // Match this with animation duration
+        if (this.currentPayrollMonth < 0) {
+            this.currentPayrollMonth = 11;
+            this.currentPayrollYear--;
+        } else if (this.currentPayrollMonth > 11) {
+            this.currentPayrollMonth = 0;
+            this.currentPayrollYear++;
         }
+
+        // Generate new payroll table
+        this.generatePayrollTable();
+        
+        // Add slide in animation
+        payrollBody.className = direction > 0 ? 'slide-in-right' : 'slide-in-left';
+    }, 200);
+        }
+           
 
         getHolidays(year) {
             // Fix ünnepnapok
