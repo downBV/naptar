@@ -3760,33 +3760,31 @@
         }
 
         changeSettingsYear(direction) {
-            const settingsContent = document.getElementById("settings-section");
-            
-            // Add slide out animation
-            settingsContent.className = `section ${direction > 0 ? 'slide-year-out-left' : 'slide-year-out-right'}`;
-            
-            setTimeout(() => {
-                this.currentSettingsYear += direction;
+    // Korlátozzuk az éveket 2024 és 2028 között
+    const newYear = this.currentSettingsYear + direction;
+    if (newYear < 2024 || newYear > 2028) {
+        return; // Nem megyünk tovább, ha elértük a korlátokat
+    }
+
+    const settingsContent = document.getElementById("settings-section");
+    
+    // Add slide out animation
+    settingsContent.className = `section ${direction > 0 ? 'slide-year-out-left' : 'slide-year-out-right'}`;
+    
+    setTimeout(() => {
+        this.currentSettingsYear = newYear;
+
+        // Frissítsük az év kijelzést
+        document.getElementById("current-settings-year").textContent = this.currentSettingsYear;
+
+        // Töltsük be az adott év beállításait
+        this.loadYearSettings(this.currentSettingsYear);
         
-                // Korlátozzuk az éveket 2024 és 2028 között
-                if (this.currentSettingsYear < 2024) {
-                    this.currentSettingsYear = 2024;
-                    return;
-                } else if (this.currentSettingsYear > 2028) {
-                    this.currentSettingsYear = 2028;
-                    return;
-                }
-        
-                // Frissítsük az év kijelzést
-                document.getElementById("current-settings-year").textContent = this.currentSettingsYear;
-        
-                // Töltsük be az adott év beállításait
-                this.loadYearSettings(this.currentSettingsYear);
-                
-                // Add slide in animation
-                settingsContent.className = `section active ${direction > 0 ? 'slide-year-in-right' : 'slide-year-in-left'}`;
-            }, 200);
+        // Add slide in animation
+        settingsContent.className = `section active ${direction > 0 ? 'slide-year-in-right' : 'slide-year-in-left'}`;
+    }, 200);
         }
+
 
         loadYearSettings(year) {
             // Frissítsük a kijelzett évet
