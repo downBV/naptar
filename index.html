@@ -606,11 +606,11 @@
         border-collapse: collapse;
         table-layout: fixed;
         margin-bottom: 0;
+        will-change: transform, box-shadow;
     }
 
     #calendar-body td{
-        border: 1px groove rgb(0, 0, 0);
-        box-shadow: 0 0 5px;
+        border: 2px groove rgb(0, 0, 0);
     }
 
     #calendarTable th {
@@ -620,14 +620,22 @@
         vertical-align: center;
         height: 40px;
         width: 14.28571%;
-        box-shadow: 0 0 5px;
     }
+
     #calendarTable td {
         padding: 1px;
         text-align: center;
         vertical-align: top;
         height: 80px;
         width: 14.28571%;
+        transition: none !important;
+    }
+
+    .slide-in-right,
+    .slide-in-left,
+    .slide-out-right,
+    .slide-out-left {
+        box-shadow: 0 0 5px black !important; /* Kényszerített box-shadow */
     }
 
     .date-container {
@@ -1215,10 +1223,12 @@
         from {
             opacity: 0;
             transform: translate3d(100%, 0, 0);
+            box-shadow: 0 0 5px black;
         }
         to {
             opacity: 1;
             transform: translate3d(0, 0, 0);
+            box-shadow: 0 0 5px black;
         }
     }
     
@@ -1226,10 +1236,12 @@
         from {
             transform: translateX(-100%);
             opacity: 0;
+            box-shadow: 0 0 5px black;
         }
         to {
             transform: translateX(0);
             opacity: 1;
+            box-shadow: 0 0 5px black;
         }
     }
     
@@ -1237,10 +1249,12 @@
         from {
             transform: translateX(0);
             opacity: 1;
+            box-shadow: 0 0 5px black;
         }
         to {
             transform: translateX(100%);
             opacity: 0;
+            box-shadow: 0 0 5px black;
         }
     }
     
@@ -1248,28 +1262,33 @@
         from {
             transform: translateX(0);
             opacity: 1;
+            box-shadow: 0 0 5px black;
         }
         to {
             transform: translateX(-100%);
             opacity: 0;
+            box-shadow: 0 0 5px black;
         }
     }
     
-    
     .slide-in-right {
         animation-name: slideInRight;
+        box-shadow: 0 0 5px black;
     }
     
     .slide-in-left {
         animation-name: slideInLeft;
+        box-shadow: 0 0 5px black;
     }
     
     .slide-out-right {
         animation-name: slideOutRight;
+        box-shadow: 0 0 5px black;
     }
     
     .slide-out-left {
         animation-name: slideOutLeft;
+        box-shadow: 0 0 5px black;
     }
 
     @keyframes slideYearInRight {
