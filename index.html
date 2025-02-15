@@ -955,7 +955,6 @@
         padding: 0px;
         margin-top: 3px;
         border: 1px solid #666666;
-        border-radius: 3px;
         height: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -3194,7 +3193,21 @@
                     }
                 }, false);
         
-                // Touch és Click események kombinált kezelése
+                document.addEventListener('contextmenu', function(e) {
+                    const navButtons = [
+                        document.getElementById('prev-month-btn'),
+                        document.getElementById('next-month-btn'),
+                        document.getElementById('prev-payroll-month-btn'),
+                        document.getElementById('next-payroll-month-btn'),
+                        document.getElementById('prev-settings-year-btn'),
+                        document.getElementById('next-settings-year-btn')
+                    ];
+                
+                    if (navButtons.some(button => button && button.contains(e.target))) {
+                        e.preventDefault();
+                    }
+                }, false);// Touch és Click események kombinált kezelése
+
                 const navButtons = document.querySelectorAll('#navbar button');
                 navButtons.forEach(button => {
                     const handleNavigation = () => {
