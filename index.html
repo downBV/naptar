@@ -25,6 +25,16 @@
         margin: 0;
         padding: 0;
         touch-action: manipulation;
+        /* Webkit böngészők (Chrome, Safari) */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Firefox */
+        scrollbar-width: none;
+        
+        /* Internet Explorer és Edge */
+        -ms-overflow-style: none;
     }
 
     body {
@@ -34,12 +44,12 @@
         height: 100vh;
         display: flex;
         flex-direction: column;
-        padding-top: 100px;
+        padding-top: 60px;
     }
 
     .nav-icon {
-        width: 40px;
-        height: 40px;
+        width: 25px;
+        height: 25px;
         margin: auto;
         filter: brightness(0) invert(1);
         transition: transform 0.2s ease;
@@ -54,7 +64,7 @@
         color: white;
         display: flex;
         width: 100%;
-        height: 90px;
+        height: 60px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         position: fixed;
         top: 0;
@@ -70,8 +80,7 @@
         border-radius: 5px;
         color: white;
         width: 100%;
-        height: 90px;
-        font-size: 16px;
+        height: 60px;
         padding: 0 0px;
         white-space: nowrap;
         display: flex;
@@ -537,11 +546,18 @@
         display: block;
     }
 
+    body, #content {
+        -webkit-overflow-scrolling: touch;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
     #content {
-    width: 100%;
-    box-sizing: border-box;
-    height: calc(100vh - 90px);
-    overflow-y: auto;
+        width: 100%;
+        box-sizing: border-box;
+        height: calc(100vh - 60px);
+        overflow-y: auto;
+        overscroll-behavior-y: none;
     }
 
     #calendar-header {
@@ -549,16 +565,17 @@
         flex-shrink: 0;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 10px;
+        height: 50px;
     }
 
     #calendar-header button {
-        background-color: #000;
+        background-color: transparent;
         color: white;
         border: none;
+        height: 40px;
+        width: 40px;
         margin: 5px;
-        padding: 10px 15px;
-        font-size: 30px;
+        font-size: 20px;
         border-radius: 5px;
     }
 
@@ -1006,6 +1023,7 @@
         border: 2px solid #000;
         border-collapse: separate;  /* Külön cellák */
         border-spacing: 0;  /* Nincs térköz */
+        font-size: 15px;
     }
     
     #payroll-table tr {
@@ -1017,6 +1035,7 @@
         border: 2px solid #000;
         border-width: 2px thin;  /* Explicit szegélyvastagság */
         box-shadow: 0 0 8px rgb(0, 0, 0);
+        height: 20px;
         padding: 8px;
         text-align: left;
         font-weight: bold;
@@ -1036,26 +1055,29 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 10px 0;
         background-color: #f4f4f4;
         position: fixed;
         width: 100%;
-        top: 90px;
         z-index: 100;
+        flex-shrink: 0;
+        align-items: center;
+        margin: 0px;
+        height: 50px;
     }
 
     #payroll-content {
-        padding: 80px 0 10px 0;
+        height: 100%;
+        margin: 1px;
+        margin-top: 50px;
     }
 
     #payroll-header button {
-        background-color: #000;
+        background-color: transparent;
         color: white;
         border: none;
         margin: 5px;
-        padding: 10px 15px;
-        font-size: 30px;
-        border-radius: 5px;
+        height: 40px;
+        width: 40px;
     }
 
     .w-24 {
@@ -1071,11 +1093,6 @@
         padding-right: 0.5rem;
     }
 
-    .py-1 {
-        padding-top: 0.25rem;
-        padding-bottom: 0.25rem;
-    }
-
     .border {
         border: 1px solid #e2e8f0;
     }
@@ -1087,11 +1104,15 @@
     /* Input mező stílusok */
     #payroll-body input[type="number"] {
         border: 1px solid #e2e8f0;
-        padding: 4px 8px;
-        font-size: 16px;
+        font-size: 15px;
         font-weight: bold;
         width: 100px;
         text-align: center;
+        height: 100%; /* Ez teszi a mezőt a cella teljes magasságúvá */
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        height: 100%;
     }
 
     #payroll-body input[type="number"]:focus {
@@ -1101,34 +1122,34 @@
     }
 
     salary-container {
-      position: relative;
-      display: flex;
-      align-items: center;
-      width: 100%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
     }
     
     .salary-input {
-      width: 100%;
-      transition: all 0.3s ease;
+        width: 100%;
+        transition: all 0.3s ease;
     }
     
     .visibility-toggle {
-      position: absolute;
-      right: 10px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      transition: transform 0.3s ease;
+        position: absolute;
+        right: 10px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        transition: transform 0.3s ease;
     }
     
     .visibility-toggle:active {
-      transform: scale(0.9);
+        transform: scale(0.9);
     }
 
     #calendar-section, #payroll-section {
@@ -1143,6 +1164,13 @@
 
     #calendar-body td{
         box-shadow: 0 0 5px black;
+    }
+
+    #calendar-body{
+        height: calc(100vh - 160px);
+        margin-bottom: 10px;
+        display: flex column;
+        flex-grow: 1;
     }
 
     #payroll-body {
@@ -1320,9 +1348,13 @@
     <div id="content">
     <div id="calendar-section" class="section active">
         <div id="calendar-header">
-        <button id="prev-month-btn">←</button>
-        <h2 id="current-month">Január 2024</h2>
-        <button id="next-month-btn">→</button>
+            <button id="prev-month-btn">
+                <img src="left.png" alt="Előző hónap" style="width: 30px; height: 30px;"/>
+            </button>
+            <h2 id="current-month">Január 2024</h2>
+            <button id="next-month-btn">
+                <img src="right.png" alt="Következő hónap" style="width: 30px; height: 30px;"/>
+            </button>
         </div>
         <table id="calendarTable">
         <thead>
@@ -1344,9 +1376,13 @@
 
     <div id="payroll-section" class="section">
         <div id="payroll-header">
-        <button id="prev-payroll-month-btn">←</button>
-        <h2 id="current-payroll-month">Január 2024</h2>
-        <button id="next-payroll-month-btn">→</button>
+            <button id="prev-payroll-month-btn">
+                <img src="left.png" alt="Előző hónap" style="width: 30px; height: 30px;"/>
+            </button>
+            <h2 id="current-payroll-month">Január 2024</h2>
+            <button id="next-payroll-month-btn">
+                <img src="right.png" alt="Következő hónap" style="width: 30px; height: 30px;"/>
+            </button>
         </div>
         <div id="payroll-content">
         <table id="payroll-table">
@@ -1377,31 +1413,35 @@
         <button
             id="prev-settings-year-btn"
             style="
-            background-color: #000;
+            background-color: transparent;
             color: white;
             border: none;
             padding: 10px 15px;
-            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin-left: -10px;
             border-radius: 5px;
             "
         >
-            ←
+            <img src="left.png" alt="Előző év" style="width: 30px; height: 30px;"/>
         </button>
         <h2 id="current-settings-year"></h2>
         <button
             id="next-settings-year-btn"
             style="
-            background-color: #000;
+            background-color: transparent;
             color: white;
             border: none;
             padding: 10px 15px;
-            font-size: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin-right: -10px;
             border-radius: 5px;
             "
         >
-            →
+            <img src="right.png" alt="Következő év" style="width: 30px; height: 30px;"/>
         </button>
         </div>
 
