@@ -589,12 +589,12 @@
     }
 
     #current-month {
-        font-size: 26px;
+        font-size: 30px;
         margin: 0;
     }
 
     #current-payroll-month {
-        font-size: 26px;
+        font-size: 30px;
         margin: 0;   
     }
 
@@ -606,12 +606,16 @@
         border-collapse: collapse;
         table-layout: fixed;
         margin-bottom: 0;
-        box-shadow: 0 0 8px black;
+        box-shadow: 0 0 3px black;
+    }
+
+    #calendar-body td{
+        border: 3px groove rgb(110, 110, 110);
+        box-shadow: 0 0 5px black;
     }
 
     #calendarTable th {
-        border: 3px solid #000;
-        border-radius: 10px;
+        border: 3px groove black;
         padding: 1px;
         text-align: center;
         vertical-align: center;
@@ -620,8 +624,6 @@
         box-shadow: 0 0 5px black;
     }
     #calendarTable td {
-        border: 3px groove #ddd;
-        border-radius: 10px;
         padding: 1px;
         text-align: center;
         vertical-align: top;
@@ -640,7 +642,7 @@
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
-        box-shadow: 0 0 5px black;
+        box-shadow: 0 0px 5px black;
     }
 
     .date-number {
@@ -776,12 +778,6 @@
         color: white;
     }
 
-    /* Hétvégék kiemelése */
-    #calendarTable tr td:nth-child(6),
-    #calendarTable tr td:nth-child(7) {
-        background-color: #f9f9f9;
-    }
-
     /* Ünnepnapok piros színnel */
     .holiday {
         background-color: #ff5353 !important; /* Halvány piros */
@@ -909,10 +905,10 @@
         justify-content: space-between;
         align-items: center;
         height: 50px;
-        font-size: 26px;
+        font-size: 30px;
         margin-bottom: -10px;
         color: red;
-        text-shadow: 0 0.5px #000;
+        text-shadow: 0.5 0.5px #000;
     }
 
     #settings-header button {
@@ -968,8 +964,8 @@
         cursor: pointer;
         text-align: center;
         word-break: break-all;
-        box-shadow: 0px 0px 3px black;
     }
+    
     select.shift-select {
         appearance: menulist;
         -webkit-appearance: menulist;
@@ -1195,10 +1191,6 @@
     #calendar-body, #payroll-body {
         animation-duration: 0.2s;
         animation-fill-mode: both;
-    }
-
-    #calendar-body td{
-        box-shadow: 0 0 5px black;
     }
 
     #calendar-body{
