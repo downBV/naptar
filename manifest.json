@@ -32,6 +32,18 @@
       "purpose": "any maskable"
     },
     {
+      "src": "left.png",
+      "sizes": "1280x1280",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "right.png",
+      "sizes": "1280x1280",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
       "src": "icon.png",
       "sizes": "649x649",
       "type": "image/png",
