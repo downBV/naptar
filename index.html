@@ -3881,6 +3881,7 @@
                         szabadsag: "25",
                         muszakrend: "1", // Alapértelmezett érték visszaállítása
                         other_income: "0",
+                        children_count: "0",
                         under25: {
                             enabled: false,
                             birthYear: "",
@@ -3917,6 +3918,11 @@
             if (vacationDaysInput) {
                 vacationDaysInput.value = yearData.settings.szabadsag || "25";
             }
+
+            const childrenCountInput = document.getElementById('children-count');
+    if (childrenCountInput) {
+        childrenCountInput.value = yearData.settings.children_count || "0";
+    }
             
             // 25 év alatti beállítások
             const under25 = yearData.settings.under25 || { enabled: false };
