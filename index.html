@@ -2522,8 +2522,8 @@
                     if (isHoliday) {
                         if (shiftValue.includes("Nappal") ||
                             shiftValue.includes("Éjszaka") ||
-                            shiftvalue.includes("Túlóra 12 ó") ||
-                            shiftvalue.includes("Túlóra éj 12 ó")) {
+                            shiftValue.includes("Túlóra 12 ó") ||
+                            shiftValue.includes("Túlóra éj 12 ó")) {
                             holidayCount += 1;
                             holidayValue += 12;
                         } else if (shiftValue.includes("Szabadság éj 8 óra") ||
@@ -2532,8 +2532,8 @@
                             holidayValue += 4;
                         } else if (shiftValue.includes("Szabadság 4 óra") ||
                                   shiftValue.includes("Szabadság éj 4 óra") ||
-                                  shiftvalue.includes("Túlóra 8 ó") ||
-                                  shiftvalue.includes("Túlóra éj 8 ó")) {
+                                  shiftValue.includes("Túlóra 8 ó") ||
+                                  shiftValue.includes("Túlóra éj 8 ó")) {
                             holidayCount += 2/3;
                             holidayValue += 8;
                         } else if (shiftValue.includes("Szabadság 12 óra") ||
