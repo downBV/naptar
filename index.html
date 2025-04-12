@@ -2573,8 +2573,10 @@
                             if (!shiftValue) return;
                             const date = new Date(year, monthIndex, parseInt(day));
                             const isSunday = date.getDay() === 0;  // Csak vasárnapra ellenőrzünk
+                            const isHoliday = this.isHoliday(year, monthIndex, parseInt(day));
                     
-                            if (isSunday) {  // Csak vasárnapi napokra számolunk
+                            // Csak vasárnapokra számolunk hétvégi pótlékot, és csak ha nem ünnepnap
+                            if (isSunday && !isHoliday) {
                                 if (shiftValue.includes("Nappal") || shiftValue.includes("Éjszaka")) {
                                     totalWeekendHours += 12;
                                 } else if (shiftValue.includes("Szabadság 8 óra") || 
@@ -2600,13 +2602,49 @@
                                     }
                                 }
                             }
+                            // Eltávolítottuk a szombati napokra vonatkozó külön feltételt
                         });
                     
                         return totalWeekendHours;
                     }
-
-                    case "Műszakpótlék 40%":
+                    
+                    // Műszakpótlék 40% számításának módosítása
+                    case "Műszakpótlék 40%": {
+                        let muszakPotlek40 = 0;
+                        
+                        // Napi értékek számítása
+                        Object.entries(monthData).forEach(([day, shiftValue]) => {
+                            if (!shiftValue) return;
+                            
+                            // Ellenőrizzük, hogy ünnepnap-e
+                            const isHoliday = this.isHoliday(year, monthIndex, parseInt(day));
+                            
+                            // Csak akkor számolunk műszakpótlékot, ha nem ünnepnap, vagy ha ünnepnap, de nem túlóra
+                            if (!isHoliday || (isHoliday && !shiftValue.includes("Túlóra"))) {
+                                if (shiftValue.includes("Éjszaka")) {
+                                    muszakPotlek40 += 12;
+                                } else if (shiftValue.includes("Túlóra éj 12 óra")) {
+                                    muszakPotlek40 += 12;
+                                } else if (shiftValue.includes("Túlóra éj 8 óra")) {
+                                    muszakPotlek40 += 8;
+                                } else if (shiftValue.includes("Szabadság éj 4 óra") ||
+                                          shiftValue.includes("Csúszó éj 4 óra")) {
+                                    muszakPotlek40 += 8;
+                                } else if (shiftValue.includes("Szabadság éj 8 óra") ||
+                                          shiftValue.includes("Csúszó éj 8 óra")) {
+                                    muszakPotlek40 += 4;
+                                }
+                            }
+                        });
+                        
                         return muszakPotlek40;
+                    }
+
+                    case "Teljesítmény prémium": {
+                            const yearData = this.app.yearlyData[year];
+                            const bonusValue = yearData.bonusEntries?.[monthIndex] || 0;
+                            return effectiveSalary * 0.05 * bonusValue;
+                        }
 
                     case "Alapbér":
                         return ledolgozando > 0 ? (effectiveSalary / ledolgozando) * ledolgozott : 0;
@@ -2669,18 +2707,23 @@
                         return Math.round(normalTulorapotlek + vasarnapiTulorapotlek);
                     }
                     case "Hétvégi pótlék (50%)": {
-                        const weekendHours = this.calculateMonthlyValue("Hétvégi pótlék 50%", monthIndex, year);
+                        // Először lekérjük az óraszámot a már javított Hétvégi pótlék 50% függvényből
+                        const hetvegipotlekHours = this.calculateMonthlyValue("Hétvégi pótlék 50%", monthIndex, year);
                         const effectiveSalary = this.getEffectiveSalary(year, monthIndex);
-                        return Math.round((effectiveSalary / 174) * weekendHours * 0.5);
+                        
+                        // Majd kiszámoljuk a pénzösszeget
+                        return Math.round((effectiveSalary / 174) * hetvegipotlekHours * 0.5);
                     }
-
-                    case "Műszakpótlék (40%)":
-                        return (effectiveSalary / 174) * muszakPotlek40 * 0.4;
-                        case "Teljesítmény prémium": {
-                            const yearData = this.app.yearlyData[year];
-                            const bonusValue = yearData.bonusEntries?.[monthIndex] || 0;
-                            return effectiveSalary * 0.05 * bonusValue;
-                        }
+                    
+                    // Műszakpótlék javítása
+                    case "Műszakpótlék (40%)": {
+                        // Először lekérjük az óraszámot a már javított Műszakpótlék 40% függvényből
+                        const muszakPotlekHours = this.calculateMonthlyValue("Műszakpótlék 40%", monthIndex, year);
+                        const effectiveSalary = this.getEffectiveSalary(year, monthIndex);
+                        
+                        // Majd kiszámoljuk a pénzösszeget
+                        return Math.round((effectiveSalary / 174) * muszakPotlekHours * 0.4);
+                    }
 
                     case "TB Járulék 18,5%": {
                         const bruttoBer = this.calculateMonthlyValue("Bruttó bér", monthIndex, year);
