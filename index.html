@@ -2141,7 +2141,7 @@
     class ChangelogManager {
         constructor() {
             // FONTOS: Ezt a verziószámot növeld minden új funkcióval!
-            this.currentVersion = "v2.0"; // <-- Itt változtasd a verziót
+            this.currentVersion = "v2.0.0"; // <-- Itt változtasd a verziót
             this.storageKey = "lastSeenChangelog";
         }
 
@@ -2149,7 +2149,7 @@
         getChangelog() {
             return [
                 {
-                    version: "2.0",
+                    version: "2.0.0",
                     date: "2025.05.24",
                     title: "Frissítés",
                     changes: [
@@ -3544,6 +3544,11 @@
                 this.currentPayrollMonth = this.currentMonth;
                 this.currentSettingsYear = this.currentYear;
                 this.calculator = new BerszamfejtoCalculator(this);
+                this.changelog = new ChangelogManager();    
+                // Changelog megjelenítése, ha szükséges - ÚJ!
+                setTimeout(() => {
+                    this.changelog.showChangelog();
+                }, 100);
         
                 // Adatstruktúrák inicializálása
                 this.initializeYearlyData();        
@@ -3558,13 +3563,6 @@
                 this.initTouchNavigation();
                 this.initSettings();
                 this.salaryVisibility = initSalaryVisibility();
-                // Changelog kezelő inicializálása - ÚJ!
-                this.changelog = new ChangelogManager();
-                
-                // Changelog megjelenítése, ha szükséges - ÚJ!
-                setTimeout(() => {
-                    this.changelog.showChangelog();
-                }, 1000); // 1 másodperc késleltetés a teljes betöltés után
                 this.generateCalendar();
                 this.initPayrollNavigation();
                 this.generatePayrollTable();
