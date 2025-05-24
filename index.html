@@ -2095,6 +2095,10 @@
                 // Húsvéthétfő
                 const easterMonday = new Date(easter);
                 easterMonday.setDate(easter.getDate() + 1);
+
+                // Pünkösd vasárnap (Húsvét után 49 nappal)
+                const pentecostSunday = new Date(easter);
+                pentecostSunday.setDate(easter.getDate() + 49);
                 
                 // Pünkösdhétfő (Húsvét után 50 nappal)
                 const pentecostMonday = new Date(easter);
@@ -2105,6 +2109,7 @@
                     { month: goodFriday.getMonth(), day: goodFriday.getDate() },           // Nagypéntek
                     { month: easterSunday.getMonth(), day: easterSunday.getDate() },       // Húsvétvasárnap
                     { month: easterMonday.getMonth(), day: easterMonday.getDate() },       // Húsvéthétfő
+                    { month: pentecostSunday.getMonth(), day: pentecostSunday.getDate() }, // Pünkösd vasárnap
                     { month: pentecostMonday.getMonth(), day: pentecostMonday.getDate() }  // Pünkösdhétfő
                 ];
     
@@ -4331,6 +4336,7 @@
             const movingHolidays = [
                 { month: goodFriday.getMonth(), day: goodFriday.getDate() },           // Nagypéntek
                 { month: easterMonday.getMonth(), day: easterMonday.getDate() },       // Húsvéthétfő
+                { month: pentecostSunday.getMonth(), day: pentecostSunday.getDate() }, // Pünkösd vasárnap
                 { month: pentecostMonday.getMonth(), day: pentecostMonday.getDate() }  // Pünkösdhétfő
             ];
         
