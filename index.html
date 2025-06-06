@@ -649,6 +649,12 @@
         border: solid 1px black;
     }
 
+    .today .date-number {
+    border: 2px solid #ff0000 !important;
+    background-color: #ff0000 !important;
+    color: white !important;
+    }
+
     .date-number {
         font-weight: bold;
         margin: 3px 3px;
@@ -2236,16 +2242,12 @@
         getChangelog() {
             return [
                 {
-                    version: "2.0.1",
-                    date: "2025.05.24",
+                    version: "2.0.2",
+                    date: "2025.06.06",
                     title: "Frissítés",
                     changes: [
-                        "➕ Új: A napra kattintva mostmár lehet megjegyzést írni az adott naphoz.",
-                        "🔧 Javítás: Pünkösd Vasárnap mostmár ünnepnapnak számít.",
-                        "🔧 Javítás: A 25 év alatti adókedvezmény mostmár látható a bérszámfejtésben a SZJA levonásnál(Eddig is jól számolta csak vizuálisan nem mutatta jól).",
-                        "✨ Fejlesztés: A hónapok közötti váltás mostmár szinkronban, egyszerre változik a Naptár és a Bérszámfejtés menüben.",
-                        "✨ Fejlesztés: A súgó menü frissítése a program használatáról és részletes leírás képletekkel és magyarázatokkal, hogy a bérszámfejtés mi alapján történik"
-                    ]
+                        "➕ Új: A naptárban a mai nap jelölve van piros háttérrel.",
+                        ]
                 },
             ];
         }
