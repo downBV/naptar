@@ -1499,27 +1499,6 @@
             transform: translateY(0) scale(1);
         }
     }
-
-    #prev-month-btn img,
-    #next-month-btn img,
-    #prev-payroll-month-btn img,
-    #next-payroll-month-btn img,
-    #prev-settings-year-btn img,
-    #next-settings-year-btn img {
-        filter: none !important;
-    }
-
-    /* Sötét témában fehér nyilak */
-    @media (prefers-color-scheme: dark) {
-        #prev-month-btn img,
-        #next-month-btn img,
-        #prev-payroll-month-btn img,
-        #next-payroll-month-btn img,
-        #prev-settings-year-btn img,
-        #next-settings-year-btn img {
-            filter: brightness(0) invert(1) !important;
-        }
-    }
         
     </style>
 </head>
@@ -4386,6 +4365,7 @@
                         szabadsag: "25",
                         muszakrend: "1", // Alapértelmezett érték visszaállítása
                         other_income: "0",
+                        children_count: "0",
                         under25: {
                             enabled: false,
                             birthYear: "",
@@ -4421,6 +4401,11 @@
             const vacationDaysInput = document.getElementById('vacation-days');
             if (vacationDaysInput) {
                 vacationDaysInput.value = yearData.settings.szabadsag || "25";
+            }
+
+            const childrenCountInput = document.getElementById('children-count');
+            if (childrenCountInput) {
+                childrenCountInput.value = yearData.settings.children_count || "0";
             }
             
             // 25 év alatti beállítások
@@ -4496,6 +4481,19 @@
                 const baseSalaryInput = document.getElementById("base-salary");
                 const vacationDaysInput = document.getElementById("vacation-days");
                 const otherIncomeInput = document.getElementById("other-income");
+                const childrenCountInput = document.getElementById("children-count");
+                if (childrenCountInput && this.yearlyData[this.currentYear]?.settings) {
+                    childrenCountInput.value = this.yearlyData[this.currentYear].settings.children_count || "0";
+                    
+                    // Event listener hozzáadása az automatikus mentéshez
+                    childrenCountInput.addEventListener('input', () => {
+                        if (this.yearlyData[this.currentSettingsYear]?.settings) {
+                            this.yearlyData[this.currentSettingsYear].settings.children_count = childrenCountInput.value || "0";
+                            this.saveYearlyData();
+                            this.generatePayrollTable(); // Bérszámfejtés frissítése
+                        }
+                    });
+                }
         
                 // Ellenőrizzük, hogy léteznek-e az elemek és van-e settings objektum
                 if (shiftPatternSelect && this.yearlyData[this.currentYear]?.settings) {
