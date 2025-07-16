@@ -12,6 +12,21 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
+    <link rel="icon" type="image/png" sizes="1024x1024" href="./icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./icon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./icon.png">
+    <link rel="shortcut icon" href="./icon.png">
+    <link rel="apple-touch-icon" sizes="1024x1024" href="./icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icon.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./icon.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./icon.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./icon.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="./icon.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="./icon.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="./icon.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="./icon.png">
+    <link rel="apple-touch-icon" href="./icon.png">
     <link rel="icon" type="image/png" href="./icon.png">
     <link rel="apple-touch-icon" href="icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -1484,6 +1499,27 @@
             transform: translateY(0) scale(1);
         }
     }
+
+    #prev-month-btn img,
+    #next-month-btn img,
+    #prev-payroll-month-btn img,
+    #next-payroll-month-btn img,
+    #prev-settings-year-btn img,
+    #next-settings-year-btn img {
+        filter: none !important;
+    }
+
+    /* Sötét témában fehér nyilak */
+    @media (prefers-color-scheme: dark) {
+        #prev-month-btn img,
+        #next-month-btn img,
+        #prev-payroll-month-btn img,
+        #next-payroll-month-btn img,
+        #prev-settings-year-btn img,
+        #next-settings-year-btn img {
+            filter: brightness(0) invert(1) !important;
+        }
+    }
         
     </style>
 </head>
@@ -2443,6 +2479,7 @@
                     { month: 7, day: 20 },   // Államalapítás ünnepe
                     { month: 9, day: 23 },   // Október 23.
                     { month: 10, day: 1 },   // Mindenszentek
+                    { month: 11, day: 24 },  // Szenteste
                     { month: 11, day: 25 },  // Karácsony
                     { month: 11, day: 26 }   // Karácsony másnapja
                 ];
@@ -2923,10 +2960,13 @@
                 switch (label) {
                     case "Ledolgozandó napok":
                         return ledolgozando;
+
                     case "Ledolgozott napok":
                         return ledolgozott;
+
                     case "Szabadság kivét (óra)":
                         return szabadsagOra;
+
                     case "Túlóra (100%)": {
                         if ((monthIndex + 1) % 3 === 0) {
                             const tuloraKeret = this.calculateQuarterlyOvertime(year, monthIndex);
@@ -2934,35 +2974,46 @@
                         }
                         return tulora100;
                     }
+
                     case "Hétvégi pótlék 50%": {
                         const monthData = this.app.yearlyData[year]?.calendar_data[monthIndex] || {};
                         let totalWeekendHours = 0;
                         const pattern = this.app.yearlyData[year]?.settings?.muszakrend;
-                    
+
                         Object.entries(monthData).forEach(([day, shiftValue]) => {
                             if (!shiftValue) return;
                             const date = new Date(year, monthIndex, parseInt(day));
                             const isSunday = date.getDay() === 0;  // Csak vasárnapra ellenőrzünk
                             const isHoliday = this.isHoliday(year, monthIndex, parseInt(day));
-                    
-                            // Csak vasárnapokra számolunk hétvégi pótlékot, és csak ha nem ünnepnap
-                            if (isSunday && !isHoliday) {
+
+                            // JAVÍTÁS: Vasárnapokon számolunk hétvégi pótlékot, ünnepnapon is!
+                            if (isSunday) { // Eltávolítottuk a "&& !isHoliday" feltételt
                                 if (shiftValue.includes("Nappal") || shiftValue.includes("Éjszaka")) {
                                     totalWeekendHours += 12;
                                 } else if (shiftValue.includes("Szabadság 8 óra") || 
-                                          shiftValue.includes("Csúszó 8 óra") ||
-                                          shiftValue.includes("Szabadság éj 8 óra") || 
-                                          shiftValue.includes("Csúszó éj 8 óra")) {
+                                        shiftValue.includes("Csúszó 8 óra") ||
+                                        shiftValue.includes("Szabadság éj 8 óra") || 
+                                        shiftValue.includes("Csúszó éj 8 óra")) {
                                     totalWeekendHours += 4;
                                 } else if (shiftValue.includes("Szabadság 4 óra") || 
-                                          shiftValue.includes("Csúszó 4 óra") ||
-                                          shiftValue.includes("Szabadság éj 4 óra") || 
-                                          shiftValue.includes("Csúszó éj 4 óra")) {
+                                        shiftValue.includes("Csúszó 4 óra") ||
+                                        shiftValue.includes("Szabadság éj 4 óra") || 
+                                        shiftValue.includes("Csúszó éj 4 óra")) {
                                     totalWeekendHours += 8;
                                 }
-                    
-                                // A-B-C műszakrendek esetén a vasárnapi túlórák hozzáadása
+
+                                // A-B-C műszakrendek esetén a vasárnapi túlórák hozzáadása ÜNNEPNAPON IS
                                 if (["A", "B", "C"].includes(pattern) && shiftValue.includes("Túlóra")) {
+                                    if (shiftValue.includes("12 óra")) {
+                                        totalWeekendHours += 12;
+                                    } else if (shiftValue.includes("8 óra")) {
+                                        totalWeekendHours += 8;
+                                    } else if (shiftValue.includes("4 óra")) {
+                                        totalWeekendHours += 4;
+                                    }
+                                }
+                                // JAVÍTÁS: 1-4 műszakrendek esetén is adjuk meg a túlóra hétvégi pótlékot vasárnapi ünnepnapokon
+                                else if (!["A", "B", "C"].includes(pattern) && shiftValue.includes("Túlóra")) {
                                     if (shiftValue.includes("12 óra")) {
                                         totalWeekendHours += 12;
                                     } else if (shiftValue.includes("8 óra")) {
@@ -2974,7 +3025,7 @@
                             }
                             // Eltávolítottuk a szombati napokra vonatkozó külön feltételt
                         });
-                    
+
                         return totalWeekendHours;
                     }
                     
@@ -2989,21 +3040,19 @@
                             // Ellenőrizzük, hogy ünnepnap-e
                             const isHoliday = this.isHoliday(year, monthIndex, parseInt(day));
                             
-                            // Csak akkor számolunk műszakpótlékot, ha nem ünnepnap, vagy ha ünnepnap, de nem túlóra
-                            if (!isHoliday || (isHoliday && !shiftValue.includes("Túlóra"))) {
-                                if (shiftValue.includes("Éjszaka")) {
-                                    muszakPotlek40 += 12;
-                                } else if (shiftValue.includes("Túlóra éj 12 óra")) {
-                                    muszakPotlek40 += 12;
-                                } else if (shiftValue.includes("Túlóra éj 8 óra")) {
-                                    muszakPotlek40 += 8;
-                                } else if (shiftValue.includes("Szabadság éj 4 óra") ||
-                                          shiftValue.includes("Csúszó éj 4 óra")) {
-                                    muszakPotlek40 += 8;
-                                } else if (shiftValue.includes("Szabadság éj 8 óra") ||
-                                          shiftValue.includes("Csúszó éj 8 óra")) {
-                                    muszakPotlek40 += 4;
-                                }
+                            // JAVÍTÁS: Ünnepnapokon is adjuk meg a műszakpótlékot túlórázáskor
+                            if (shiftValue.includes("Éjszaka")) {
+                                muszakPotlek40 += 12;
+                            } else if (shiftValue.includes("Túlóra éj 12 óra")) {
+                                muszakPotlek40 += 12; // Ünnepnapon is jár
+                            } else if (shiftValue.includes("Túlóra éj 8 óra")) {
+                                muszakPotlek40 += 8; // Ünnepnapon is jár
+                            } else if (shiftValue.includes("Szabadság éj 4 óra") ||
+                                    shiftValue.includes("Csúszó éj 4 óra")) {
+                                muszakPotlek40 += 8;
+                            } else if (shiftValue.includes("Szabadság éj 8 óra") ||
+                                    shiftValue.includes("Csúszó éj 8 óra")) {
+                                muszakPotlek40 += 4;
                             }
                         });
                         
@@ -3148,7 +3197,7 @@
                         const totalUsedVacationDays = totalUsedVacationHours / 8;
                         
                         // Megmaradt szabadságnapok
-                        const remainingVacationDays = Math.max(0, totalVacationDays - totalUsedVacationDays);
+                        const remainingVacationDays = totalVacationDays - totalUsedVacationDays;
                         
                         return Math.round(remainingVacationDays * 10) / 10; // Kerekítés 1 tizedesjegyre
                     }
@@ -4714,6 +4763,7 @@
                 { month: 7, day: 20 },   // Államalapítás ünnepe
                 { month: 9, day: 23 },   // Október 23.
                 { month: 10, day: 1 },   // Mindenszentek
+                { month: 11, day: 24 },  // Szenteste
                 { month: 11, day: 25 },  // Karácsony
                 { month: 11, day: 26 }   // Karácsony másnapja
             ];
