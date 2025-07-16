@@ -2249,7 +2249,7 @@
     class ChangelogManager {
         constructor() {
             // FONTOS: Ezt a verziószámot növeld minden új funkcióval!
-            this.currentVersion = "v2.0.2"; // <-- Itt változtasd a verziót
+            this.currentVersion = "v2.1.0"; // <-- Itt változtasd a verziót
             this.storageKey = "lastSeenChangelog";
         }
 
@@ -2257,13 +2257,13 @@
         getChangelog() {
             return [
                 {
-                    version: "2.0.3",
-                    date: "2025.06.06",
+                    version: "2.1.0",
+                    date: "2025.07.16",
                     title: "Frissítés",
                     changes: [
                         "🔧 Ünnepnapon végzett túlórára járó pótlékok számításának javítása",
-                        "🔧 BUG-ok kijavítása",
-                        "🔧 A megmaradt szabadságokat már mínuszban is mutatja nem áll meg 0-nál"
+                        "🔧 BUG-ok, grafikai hibák kijavítása",
+                        "🔧 A megmaradt szabadságokat már mínuszban is mutatja, nem áll meg 0-nál"
                         ]
                 },
             ];
