@@ -1,4 +1,4 @@
-const CACHE_NAME = 'Cache_Version_1'; // Verzió növelése
+const CACHE_NAME = 'Cache_Version_2'; // Verzió növelése
 const urlsToCache = [
   '/naptar/',
   '/naptar/index.html',
@@ -123,4 +123,5 @@ self.addEventListener('error', event => {
 self.addEventListener('unhandledrejection', event => {
   console.error('Service Worker unhandled rejection:', event.reason);
 });
+
 
